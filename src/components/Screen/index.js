@@ -1,9 +1,9 @@
 import React from 'react';
 import { SafeAreaView } from 'react-native';
 
-const Screen = ({ children }) => {
+const Screen = ({ children, ...props }) => {
   return (
-    <SafeAreaView>
+    <SafeAreaView {...props}>
       {children}
     </SafeAreaView>
   );
