@@ -18,7 +18,6 @@ export const get = async (endPoint, filter, sort) => {
 export const save = async (endPoint, data) => {
   const saveDoc = createSaveDoc(data, endPoint);
   const response = await api.post(SAVE_DOC_END_POINT, saveDoc);
-  console.log('response SAVE', response);
   return response;
 };
 

@@ -52,7 +52,7 @@ const getFieldSaveValue = (propValue, fieldType) => {
     return mountSaveArray(propValue);
   }
   return propValue;
-}
+};
 
 const mountSaveArray = array => {
   const newArray = [];

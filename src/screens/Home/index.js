@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Button, FlatList, StyleSheet, View } from 'react-native';
+import { Button, FlatList, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
 import RestaurantCard from '../../components/RestaurantCard';
 import Screen from '../../components/Screen';
+import routes from '../../navigation/routes';
 import RestaurantService from '../../services/RestaurantService';
 import { userCanCreateRestaurants } from '../../utils/user';
 
@@ -31,9 +32,15 @@ const Home = ({ navigation }) => {
     <RestaurantCard data={restaurant} />
   );
 
+  const openNewRestaurantPage = () => {
+    navigation.navigate(routes.NEW_EDIT_RESTAURANT);
+  };
+
   return (
     <Screen style={styles.container}>
-      {userCanCreateRestaurants(user) && <Button title="New Restaurant" />}
+      {userCanCreateRestaurants(user) && (
+        <Button title="New Restaurant" onPress={openNewRestaurantPage} />
+      )}
       <FlatList
         style={styles.flatList}
         data={restaurants}
