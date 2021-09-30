@@ -3,22 +3,33 @@ import { Button, Text, TextInput, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import Screen from '../../components/Screen';
 import RestaurantService from '../../services/RestaurantService';
+import routes from '../../navigation/routes';
+import { checkIfUserIsAdmin } from '../../utils/user';
 
-const EditRestaurant = ({}) => {
-  const [id, setId] = useState('');
-  const [name, setName] = useState('');
+const EditRestaurant = ({ route, navigation }) => {
+  const editingRestaurant = route.params;
+  const [name, setName] = useState(editingRestaurant?.name ?? '');
   const user = useSelector(state => state.user);
+  const userIsAdmin = checkIfUserIsAdmin(user);
 
   const onSave = async () => {
     try {
       const restaurantDoc = {
-        id,
+        id: editingRestaurant ? editingRestaurant.id : Date.now(),
         name,
-        // na hora de criar o owner tem que ver quando estiver só editando o campo
-        // para o admin não alterar o owner de um outro restaurante pra ele na hora de salvar
-        owner: user.id,
+        owner: editingRestaurant ? editingRestaurant.owner : user.id,
       };
       await RestaurantService.saveRestaurant(restaurantDoc);
+      navigation.navigate(routes.HOME);
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
+
+  const onDelete = async () => {
+    try {
+      await RestaurantService.deleteRestaurant(editingRestaurant.id);
+      navigation.navigate(routes.HOME);
     } catch (error) {
       console.log('error', error);
     }
@@ -26,14 +37,20 @@ const EditRestaurant = ({}) => {
 
   return (
     <Screen>
-      <View style={{flexDirection: 'row'}}>
-        <Text>ID</Text>
-        <TextInput value={id} onChangeText={setId} style={{ borderBottomWidth: 1, flex: 1, marginHorizontal: 10 }} autoCapitalize="none" />
+      <View style={{ flexDirection: 'row' }}>
+        <Text>ID </Text>
+        <Text>{editingRestaurant?.id || 'New Restaurant'}</Text>
       </View>
       <View style={{flexDirection: 'row'}}>
         <Text>Name</Text>
         <TextInput value={name} onChangeText={setName} style={{ borderBottomWidth: 1, flex: 1, marginHorizontal: 10 }} autoCapitalize="none" />
       </View>
+      {userIsAdmin && (
+        <View>
+          <Text>Admin fields</Text>
+          {!!editingRestaurant && <Button title="Delete" onPress={onDelete} />}
+        </View>
+      )}
       <Button title="Save" onPress={onSave} />
     </Screen>
   );

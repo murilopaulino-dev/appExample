@@ -89,27 +89,23 @@ export const createFilter = filterArray => {
   return newFilterObj;
 };
 
-export const createQuery = (options, collectionId) => {
-  const query = {
-    structuredQuery: {
-      from: [{ collectionId }],
-      where: options,
-    },
-  };
-  return query;
-};
+export const createQuery = (options, collectionId) => ({
+  structuredQuery: {
+    from: [{ collectionId }],
+    where: options,
+  },
+});
 
-export const createSaveDoc = (doc, endPoint) => {
-  const saveDoc = {
-    writes: [{
+export const createSaveDoc = (doc, endPoint) => ({
+  writes: [
+    {
       update: {
         name: `${FIRESTORE_URL}${endPoint}/${doc.id}`,
         fields: mountSaveDoc(doc),
       },
-    }],
-  };
-  return saveDoc;
-};
+    },
+  ],
+});
 
 const arrayMapper = array => {
   const newArray = [];
@@ -135,4 +131,14 @@ export const docMapper = doc => {
     newDoc[fieldKey] = getFieldMapper(fieldValue);
   });
   return newDoc;
+};
+
+export const createDeleteDoc = (docId, endPoint) => {
+  return {
+    writes: [
+      {
+        delete: `${FIRESTORE_URL}${endPoint}/${docId}`,
+      },
+    ],
+  };
 };

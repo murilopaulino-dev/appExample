@@ -19,8 +19,8 @@ const Home = ({ navigation }) => {
   const fetchData = useCallback(async () => {
     setRefreshing(true);
     try {
-      // const response = await RestaurantService.getAllRestaurants();
-      const response = await RestaurantService.getMyRestaurants(user.id);
+      const response = await RestaurantService.getAllRestaurants();
+      // const response = await RestaurantService.getMyRestaurants(user.id);
       setRestaurants(response);
     } catch (error) {
       console.log('error', error);

@@ -1,4 +1,4 @@
-import { get, query, save } from '../firebase';
+import { get, query, save, deleteDoc } from '../firebase';
 
 const END_POINT = 'restaurants';
 
@@ -8,8 +8,8 @@ const DEFAULT_SORT = {
 };
 
 class RestaurantService {
-  static getAllRestaurants(filter, sort) {
-    return get(END_POINT, filter, sort);
+  static getAllRestaurants() {
+    return get(END_POINT);
   }
 
   static getMyRestaurants(userId, filter = [], sort = DEFAULT_SORT) {
@@ -19,6 +19,10 @@ class RestaurantService {
 
   static saveRestaurant(doc) {
     return save(END_POINT, doc);
+  }
+
+  static deleteRestaurant(id) {
+    return deleteDoc(END_POINT, id);
   }
 }
 
