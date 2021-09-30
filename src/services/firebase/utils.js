@@ -1,4 +1,5 @@
-import _, { filter } from 'lodash';
+import _ from 'lodash';
+import { FIRESTORE_URL } from '../../constants';
 
 const OPERATORS = {
   '==': 'EQUAL',
@@ -9,12 +10,17 @@ const FIELD_TYPE = {
   interger: 'integerValue',
   double: 'doubleValue',
   boolean: 'booleanValue',
+  object: 'mapValue',
+  array: 'arrayValue',
 };
 
 const getTypeOfField = field => {
   const fieldType = typeof field;
   if (fieldType === 'number') {
     return Number.isInteger(field) ? FIELD_TYPE.interger : FIELD_TYPE.double;
+  }
+  if (fieldType === 'object' && Array.isArray(field)) {
+    return FIELD_TYPE.array;
   }
   return FIELD_TYPE[fieldType];
 };
@@ -36,6 +42,37 @@ const mountFilterObj = filter => {
       },
     },
   };
+};
+
+const getFieldSaveValue = (propValue, fieldType) => {
+  if (fieldType === FIELD_TYPE.object) {
+    return mountSaveDoc(propValue);
+  }
+  if (fieldType === FIELD_TYPE.array) {
+    return mountSaveArray(propValue);
+  }
+  return propValue;
+}
+
+const mountSaveArray = array => {
+  const newArray = [];
+  for (let i = 0; i < array.length; i++) {
+    const fieldValue = array[i];
+    const fieldType = getTypeOfField(fieldValue);
+    newArray.push(getFieldSaveValue(fieldValue, fieldType));
+  }
+  return newArray;
+};
+
+const mountSaveDoc = doc => {
+  const field = {};
+  _.forEach(doc, (fieldValue, fieldKey) => {
+    const fieldType = getTypeOfField(fieldValue);
+    field[fieldKey] = {
+      [fieldType]: getFieldSaveValue(fieldValue, fieldType),
+    };
+  });
+  return field;
 };
 
 export const createFilter = filterArray => {
@@ -60,4 +97,42 @@ export const createQuery = (options, collectionId) => {
     },
   };
   return query;
+};
+
+export const createSaveDoc = (doc, endPoint) => {
+  const saveDoc = {
+    writes: [{
+      update: {
+        name: `${FIRESTORE_URL}${endPoint}/${doc.id}`,
+        fields: mountSaveDoc(doc),
+      },
+    }],
+  };
+  return saveDoc;
+};
+
+const arrayMapper = array => {
+  const newArray = [];
+  _.forEach(array, value => {
+    newArray.push(getFieldMapper(value));
+  });
+  return newArray;
+};
+
+const getFieldMapper = field => {
+  if (field.mapValue) {
+    return docMapper(field.mapValue.fields);
+  }
+  if (field.arrayValue) {
+    return arrayMapper(field.arrayValue.values);
+  }
+  return Object.values(field)[0];
+};
+
+export const docMapper = doc => {
+  const newDoc = {};
+  _.forEach(doc, (fieldValue, fieldKey) => {
+    newDoc[fieldKey] = getFieldMapper(fieldValue);
+  });
+  return newDoc;
 };

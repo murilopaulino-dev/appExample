@@ -1,7 +1,8 @@
 import axios from 'axios';
+import { FIRESTORE_URL } from '../../constants';
 
 const api = axios.create({
-  baseURL: 'https://firestore.googleapis.com/v1/projects/toptalapp-9998d/databases/(default)/documents/',
+  baseURL: `https://firestore.googleapis.com/v1/${FIRESTORE_URL}`,
 });
 
 export default api;

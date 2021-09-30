@@ -24,7 +24,7 @@ const UserSelector = ({ navigation }) => {
     <Screen>
       <View style={{ flexDirection: 'row', marginTop: 20 }}>
         <Text>UserId</Text>
-        <TextInput value={userId} onChangeText={setUserId} style={{ borderBottomWidth: 1, flex: 1, marginHorizontal: 10 }} />
+        <TextInput value={userId} onChangeText={setUserId} style={{ borderBottomWidth: 1, flex: 1, marginHorizontal: 10 }} autoCapitalize="none" />
       </View>
       <Button title="Normal User" onPress={() => createUser(ROLES.NORMAL)} />
       <Button title="Owner" onPress={() => createUser(ROLES.OWNER)} />

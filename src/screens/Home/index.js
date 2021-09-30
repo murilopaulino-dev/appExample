@@ -1,15 +1,15 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { FlatList, StyleSheet } from 'react-native';
+import { Button, FlatList, StyleSheet, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import RestaurantCard from '../../components/RestaurantCard';
 import Screen from '../../components/Screen';
 import RestaurantService from '../../services/RestaurantService';
+import { userCanCreateRestaurants } from '../../utils/user';
 
-const Home = ({}) => {
+const Home = ({ navigation }) => {
   const [restaurants, setRestaurants] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const user = useSelector(state => state.user);
-  console.log('user', user);
 
   useEffect(() => {
     fetchData();
@@ -33,6 +33,7 @@ const Home = ({}) => {
 
   return (
     <Screen style={styles.container}>
+      {userCanCreateRestaurants(user) && <Button title="New Restaurant" />}
       <FlatList
         style={styles.flatList}
         data={restaurants}
