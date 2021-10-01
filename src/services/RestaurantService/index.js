@@ -8,21 +8,21 @@ const DEFAULT_SORT = {
 };
 
 class RestaurantService {
-  static getAllRestaurants() {
-    return get(END_POINT);
+  static async getAllRestaurants() {
+    return await get(END_POINT);
   }
 
-  static getMyRestaurants(userId, filter = [], sort = DEFAULT_SORT) {
+  static async getMyRestaurants(userId, filter = [], sort = DEFAULT_SORT) {
     filter.push(['owner', '==', userId]);
-    return query(END_POINT, filter, sort);
+    return await query(END_POINT, filter, sort);
   }
 
-  static saveRestaurant(doc) {
-    return save(END_POINT, doc);
+  static async saveRestaurant(doc) {
+    return await save(END_POINT, doc);
   }
 
-  static deleteRestaurant(id) {
-    return deleteDoc(END_POINT, id);
+  static async deleteRestaurant(id) {
+    return await deleteDoc(END_POINT, id);
   }
 }
 

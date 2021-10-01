@@ -12,15 +12,19 @@ const FIELD_TYPE = {
   boolean: 'booleanValue',
   object: 'mapValue',
   array: 'arrayValue',
+  date: 'timestampValue',
 };
 
-const getTypeOfField = field => {
-  const fieldType = typeof field;
+const getTypeOfField = fieldValue => {
+  const fieldType = typeof fieldValue;
   if (fieldType === 'number') {
-    return Number.isInteger(field) ? FIELD_TYPE.interger : FIELD_TYPE.double;
+    return Number.isInteger(fieldValue) ? FIELD_TYPE.interger : FIELD_TYPE.double;
   }
-  if (fieldType === 'object' && Array.isArray(field)) {
+  if (fieldType === 'object' && Array.isArray(fieldValue)) {
     return FIELD_TYPE.array;
+  }
+  if (typeof fieldValue?.getMonth === 'function') {
+    return FIELD_TYPE.date;
   }
   return FIELD_TYPE[fieldType];
 };
@@ -44,35 +48,40 @@ const mountFilterObj = filter => {
   };
 };
 
-const getFieldSaveValue = (propValue, fieldType) => {
+const getFieldSaveValue = (fieldValue, fieldType) => {
   if (fieldType === FIELD_TYPE.object) {
-    return mountSaveDoc(propValue);
+    return mountSaveDoc(fieldValue);
   }
   if (fieldType === FIELD_TYPE.array) {
-    return mountSaveArray(propValue);
+    return mountSaveArray(fieldValue);
   }
-  return propValue;
+  if (fieldType === FIELD_TYPE.date) {
+    return fieldValue.toISOString();
+  }
+  return fieldValue;
 };
 
 const mountSaveArray = array => {
-  const newArray = [];
+  const values = [];
   for (let i = 0; i < array.length; i++) {
     const fieldValue = array[i];
     const fieldType = getTypeOfField(fieldValue);
-    newArray.push(getFieldSaveValue(fieldValue, fieldType));
+    values.push({ [fieldType]: getFieldSaveValue(fieldValue, fieldType) });
   }
-  return newArray;
+  return {
+    values,
+  };
 };
 
 const mountSaveDoc = doc => {
-  const field = {};
+  const fields = {};
   _.forEach(doc, (fieldValue, fieldKey) => {
     const fieldType = getTypeOfField(fieldValue);
-    field[fieldKey] = {
+    fields[fieldKey] = {
       [fieldType]: getFieldSaveValue(fieldValue, fieldType),
     };
   });
-  return field;
+  return { fields };
 };
 
 export const createFilter = filterArray => {
@@ -101,7 +110,7 @@ export const createSaveDoc = (doc, endPoint) => ({
     {
       update: {
         name: `${FIRESTORE_URL}${endPoint}/${doc.id}`,
-        fields: mountSaveDoc(doc),
+        ...mountSaveDoc(doc),
       },
     },
   ],
@@ -122,12 +131,15 @@ const getFieldMapper = field => {
   if (field.arrayValue) {
     return arrayMapper(field.arrayValue.values);
   }
+  if (field.timestampValue) {
+    return new Date(field.timestampValue);
+  }
   return Object.values(field)[0];
 };
 
-export const docMapper = doc => {
+export const docMapper = docFields => {
   const newDoc = {};
-  _.forEach(doc, (fieldValue, fieldKey) => {
+  _.forEach(docFields, (fieldValue, fieldKey) => {
     newDoc[fieldKey] = getFieldMapper(fieldValue);
   });
   return newDoc;

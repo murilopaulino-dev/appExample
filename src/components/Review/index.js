@@ -12,7 +12,7 @@ const editReviewArray = (reviews, newReview) => {
 };
 
 const Review = ({ restaurant, review }) => {
-  const { comment, answer, user, rating } = review;
+  const { comment, answer, user, rating, date } = review;
   const restaurantUser = useSelector(state => state.user);
   const userIsOwner = checkIfUserRestaurantOwner(restaurantUser, restaurant);
 
@@ -26,8 +26,7 @@ const Review = ({ restaurant, review }) => {
         ...restaurant,
         reviews: editReviewArray(restaurant.reviews, newReview),
       };
-      console.log('newRestaurant', newRestaurant);
-      // await RestaurantService.saveRestaurant(newRestaurant);
+      await RestaurantService.saveRestaurant(newRestaurant);
     } catch (error) {
       console.log('error', error);
     }
@@ -37,6 +36,7 @@ const Review = ({ restaurant, review }) => {
     <View style={{ marginTop: 15 }}>
       <Text>Review by {user}</Text>
       <Text>Comment: {comment}</Text>
+      <Text>Date: {date?.toLocaleDateString() || 'No Date'}</Text>
       {!!answer && <Text>Answer: {answer}</Text>}
       {userIsOwner && !answer && (
         <View style={{ flexDirection: 'row' }}>
