@@ -1,7 +1,6 @@
 import api from '../axios';
 import {
   createDeleteDoc,
-  createFilter,
   createQuery,
   createSaveDoc,
   docMapper,

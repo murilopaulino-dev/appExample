@@ -1,10 +1,11 @@
 import { ORDER } from '../../constants';
+import { calculateRestaurantAverageRating } from '../../utils/restaurant';
 import { query, save, deleteDoc } from '../firebase';
 
 const END_POINT = 'restaurants';
 
 const DEFAULT_SORT = {
-  field: 'stars',
+  field: 'averageRating',
   order: ORDER.DESC,
 };
 
@@ -22,8 +23,9 @@ class RestaurantService {
   //   return await query(END_POINT, filter, sort);
   // }
 
-  static async saveRestaurant(doc) {
-    return await save(END_POINT, doc);
+  static async saveRestaurant(restaurant) {
+    const restaurantWithAverageRating = calculateRestaurantAverageRating(restaurant);
+    return await save(END_POINT, restaurantWithAverageRating);
   }
 
   static async deleteRestaurant(id) {

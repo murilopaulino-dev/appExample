@@ -5,7 +5,7 @@ import routes from '../../navigation/routes';
 
 const Restaurant = ({ data }) => {
   const navigation = useNavigation();
-  const { name, stars, id } = data;
+  const { name, averageRating, id } = data;
 
   const openRestaurant = () => {
     navigation.navigate(routes.RESTAURANT_DETAILS, data);
@@ -15,7 +15,7 @@ const Restaurant = ({ data }) => {
     <TouchableOpacity style={{ marginBottom: 10, borderWidth: 1, padding: 5, borderRadius: 10 }} onPress={openRestaurant}>
       <Text style={{ fontSize: 15, fontWeight: 'bold' }}>{name}</Text>
       <Text>{id}</Text>
-      <Text>Rating: {stars}</Text>
+      <Text>Rating: {averageRating}</Text>
     </TouchableOpacity>
   );
 };
