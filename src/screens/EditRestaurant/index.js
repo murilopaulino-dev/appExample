@@ -5,6 +5,7 @@ import Screen from '../../components/Screen';
 import RestaurantService from '../../services/RestaurantService';
 import routes from '../../navigation/routes';
 import { checkIfUserIsAdmin } from '../../utils/user';
+import { generateNewId } from '../../utils';
 
 const EditRestaurant = ({ route, navigation }) => {
   const editingRestaurant = route.params;
@@ -16,7 +17,7 @@ const EditRestaurant = ({ route, navigation }) => {
     try {
       const restaurantDoc = {
         ...(editingRestaurant || {}),
-        id: editingRestaurant ? editingRestaurant.id : Date.now(),
+        id: editingRestaurant ? editingRestaurant.id : generateNewId(),
         name,
         owner: editingRestaurant ? editingRestaurant.owner : user.id,
       };

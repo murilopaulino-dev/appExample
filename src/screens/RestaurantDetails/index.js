@@ -5,7 +5,10 @@ import Screen from '../../components/Screen';
 import routes from '../../navigation/routes';
 import Review from '../../components/Review';
 import { useSelector } from 'react-redux';
-import { checkIfUserIsAdminOrOwner } from '../../utils/user';
+import {
+  checkIfUserIsAdminOrOwner,
+  checkIfUserRestaurantOwner,
+} from '../../utils/user';
 
 const RestaurantDetails = ({ route, navigation }) => {
   const restaurant = route.params;
@@ -28,9 +31,13 @@ const RestaurantDetails = ({ route, navigation }) => {
   useLayoutEffect(() => {
     if (!checkIfUserIsAdminOrOwner(user, restaurant)) return;
     navigation.setOptions({
-      headerRight: () => <Button title="Edit" onPress={() => navigation.navigate(routes.NEW_EDIT_RESTAURANT, restaurant)} />,
+      headerRight: () => <Button title="Edit" onPress={() => navigation.navigate(routes.EDIT_RESTAURANT, restaurant)} />,
     });
   }, [navigation, restaurant, user]);
+
+  const openNewReviewPage = () => {
+    navigation.navigate(routes.NEW_REVIEW, { restaurant });
+  };
 
   return (
     <Screen>
@@ -41,7 +48,7 @@ const RestaurantDetails = ({ route, navigation }) => {
           <Text style={{ fontSize: 15, fontWeight: 'bold' }}>Reviews</Text>
         </View>
         {myReview && <Review restaurant={restaurant} review={myReview} />}
-        {!myReview && <Button title="Write an review!" />}
+        {!myReview && !checkIfUserRestaurantOwner(user, restaurant) && <Button title="Write an review!" onPress={openNewReviewPage} />}
         {_.map(reviews, (review, index) => (
           <Review key={`review-${index}`} restaurant={restaurant} review={review} />
         ))}

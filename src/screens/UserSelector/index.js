@@ -5,6 +5,7 @@ import { ROLES } from '../../constants';
 import { setUser } from '../../redux/actions/user';
 import Screen from '../../components/Screen';
 import routes from '../../navigation/routes';
+import { generateNewId } from '../../utils';
 
 const UserSelector = ({ navigation }) => {
   const [userId, setUserId] = useState('');
@@ -13,7 +14,7 @@ const UserSelector = ({ navigation }) => {
   const createUser = role => {
     dispatch(
       setUser({
-        id: userId || `user_id_${Math.ceil(Math.random() * 1524415141)}`,
+        id: userId || `user_id_${generateNewId()}`,
         role,
       }),
     );

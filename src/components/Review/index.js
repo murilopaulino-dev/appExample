@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Text, TextInput, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import RestaurantService from '../../services/RestaurantService';
@@ -12,7 +12,8 @@ const editReviewArray = (reviews, newReview) => {
 };
 
 const Review = ({ restaurant, review }) => {
-  const { comment, answer, user, rating, date } = review;
+  const { comment, answer, user, rating, date } = review || {};
+  const [answerField, setAnswerField] = useState('');
   const restaurantUser = useSelector(state => state.user);
   const userIsOwner = checkIfUserRestaurantOwner(restaurantUser, restaurant);
 
@@ -41,8 +42,8 @@ const Review = ({ restaurant, review }) => {
       {userIsOwner && !answer && (
         <View style={{ flexDirection: 'row' }}>
           <Text>Answer</Text>
-          <TextInput style={{ borderBottomWidth: 1, flex: 1, marginHorizontal: 10 }} autoCapitalize="none" />
-          <Button title="Reply" onPress={() => editReview('answer', 'answerValue')} />
+          <TextInput value={answerField} onChangeText={setAnswerField} style={{ borderBottomWidth: 1, flex: 1, marginHorizontal: 10 }} autoCapitalize="none" />
+          <Button title="Reply" onPress={() => editReview('answer', answerField)} />
         </View>
       )}
       <Text>Rating: {rating}</Text>
