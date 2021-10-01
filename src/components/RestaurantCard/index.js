@@ -13,8 +13,8 @@ const Restaurant = ({ data }) => {
 
   return (
     <TouchableOpacity onPress={openRestaurant}>
+      <Text style={{ fontSize: 15, fontWeight: 'bold' }}>{name}</Text>
       <Text>{id}</Text>
-      <Text>{name}</Text>
       <Text>{stars}</Text>
     </TouchableOpacity>
   );

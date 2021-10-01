@@ -15,10 +15,10 @@ const EditRestaurant = ({ route, navigation }) => {
   const onSave = async () => {
     try {
       const restaurantDoc = {
+        ...(editingRestaurant || {}),
         id: editingRestaurant ? editingRestaurant.id : Date.now(),
         name,
         owner: editingRestaurant ? editingRestaurant.owner : user.id,
-        ...(editingRestaurant || {}),
       };
       await RestaurantService.saveRestaurant(restaurantDoc);
       navigation.navigate(routes.HOME);
