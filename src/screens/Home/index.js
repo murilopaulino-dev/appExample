@@ -1,26 +1,33 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Button, FlatList, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
+import FilterSort from '../../components/FilterSort';
 import RestaurantCard from '../../components/RestaurantCard';
 import Screen from '../../components/Screen';
+import { ORDER } from '../../constants';
 import routes from '../../navigation/routes';
 import RestaurantService from '../../services/RestaurantService';
-import { userCanCreateRestaurants } from '../../utils/user';
+import {
+  checkIfUserRoleIsOwner,
+  userCanCreateRestaurants,
+} from '../../utils/user';
 
 const Home = ({ navigation }) => {
   const [restaurants, setRestaurants] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [order, setOrder] = useState(ORDER.DESC);
   const user = useSelector(state => state.user);
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    fetchData(order);
+  }, [fetchData, order]);
 
-  const fetchData = useCallback(async () => {
+  const fetchData = useCallback(async (sortOrder) => {
     setRefreshing(true);
     try {
-      const response = await RestaurantService.getAllRestaurants();
-      // const response = await RestaurantService.getMyRestaurants(user.id);
+      const filter = [];
+      if (checkIfUserRoleIsOwner(user)) filter.push(['owner', '==', user.id]);
+      const response = await RestaurantService.getAllRestaurants(filter, sortOrder);
       setRestaurants(response);
     } catch (error) {
       console.log('error', error);
@@ -38,6 +45,7 @@ const Home = ({ navigation }) => {
 
   return (
     <Screen style={styles.container}>
+      <FilterSort order={order} onChangeOrder={setOrder} />
       {userCanCreateRestaurants(user) && (
         <Button title="New Restaurant" onPress={openNewRestaurantPage} />
       )}
@@ -47,6 +55,7 @@ const Home = ({ navigation }) => {
         renderItem={renderItem}
         refreshing={refreshing}
         onRefresh={fetchData}
+        contentContainerStyle={{ padding: 10 }}
       />
     </Screen>
   );

@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { FIRESTORE_URL } from '../../constants';
+import { FIRESTORE_URL, ORDER } from '../../constants';
 
 const OPERATORS = {
   '==': 'EQUAL',
@@ -13,6 +13,11 @@ const FIELD_TYPE = {
   object: 'mapValue',
   array: 'arrayValue',
   date: 'timestampValue',
+};
+
+const SORT_DIRECTION = {
+  [ORDER.ASC]: 'ASCENDING',
+  [ORDER.DESC]: 'DESCENDING',
 };
 
 const getTypeOfField = fieldValue => {
@@ -45,6 +50,15 @@ const mountFilterObj = filter => {
         [secondFieldType]: secondField,
       },
     },
+  };
+};
+
+const mountSortObj = sort => {
+  return {
+    field: {
+      fieldPath: sort.field,
+    },
+    direction: SORT_DIRECTION[sort.order],
   };
 };
 
@@ -98,12 +112,18 @@ export const createFilter = filterArray => {
   return newFilterObj;
 };
 
-export const createQuery = (options, collectionId) => ({
-  structuredQuery: {
+export const createQuery = (collectionId, filter, sort) => {
+  const structuredQuery = {
     from: [{ collectionId }],
-    where: options,
-  },
-});
+  };
+  if (filter && filter.length) {
+    structuredQuery.where = createFilter(filter);
+  }
+  if (sort) {
+    structuredQuery.orderBy = mountSortObj(sort);
+  }
+  return { structuredQuery };
+};
 
 export const createSaveDoc = (doc, endPoint) => ({
   writes: [

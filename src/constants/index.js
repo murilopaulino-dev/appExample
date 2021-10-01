@@ -5,3 +5,8 @@ export const ROLES = {
   ADMIN: 'ADMIN',
   NORMAL: 'NORMAL',
 };
+
+export const ORDER = {
+  ASC: 'asc',
+  DESC: 'desc',
+};

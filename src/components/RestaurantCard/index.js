@@ -12,10 +12,10 @@ const Restaurant = ({ data }) => {
   };
 
   return (
-    <TouchableOpacity onPress={openRestaurant}>
+    <TouchableOpacity style={{ marginBottom: 10, borderWidth: 1, padding: 5, borderRadius: 10 }} onPress={openRestaurant}>
       <Text style={{ fontSize: 15, fontWeight: 'bold' }}>{name}</Text>
       <Text>{id}</Text>
-      <Text>{stars}</Text>
+      <Text>Rating: {stars}</Text>
     </TouchableOpacity>
   );
 };

@@ -27,10 +27,8 @@ export const save = (endPoint, data) => {
 };
 
 export const query = async (endPoint, filter, sort) => {
-  const options = createFilter(filter);
-  let postQueryOptions;
-  if (options) postQueryOptions = createQuery(options, endPoint);
-  const response = await api.post(QUERY_END_POINT, postQueryOptions);
+  const queryOptions = createQuery(endPoint, filter, sort);
+  const response = await api.post(QUERY_END_POINT, queryOptions);
   const documents = [];
   response.data.forEach(doc => {
     if (doc.document) {
