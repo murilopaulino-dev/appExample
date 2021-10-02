@@ -21,7 +21,9 @@ const RestaurantDetails = ({ route, navigation }) => {
   const restaurantId = route.params.restaurantId;
   const [restaurant, setRestaurant] = useState({});
   const [reviews, setReviews] = useState([]);
-  const [myReview, setMyReview] = useState();
+  const [highestRatedReview, setHighestRatedReview] = useState();
+  const [lowestRatedReview, setLowestRatedReview] = useState();
+  const [alreadyReviewed, setAlreadyReviewed] = useState(false);
   const [loading, setLoading] = useState(false);
   const user = useSelector(state => state.user);
 
@@ -43,18 +45,25 @@ const RestaurantDetails = ({ route, navigation }) => {
   }, [restaurantId]);
 
   useEffect(() => {
-    const restaurantReviews = restaurant.reviews;
-    const userReviewIndex = _.findIndex(
-      restaurantReviews,
-      review => review.user === user.id,
-    );
-    if (userReviewIndex >= 0) {
-      setMyReview(restaurantReviews[userReviewIndex]);
-      restaurantReviews.splice(userReviewIndex, 1);
-      setReviews(restaurantReviews);
-    } else {
-      setReviews(restaurantReviews);
-    }
+    const restaurantReviews = [];
+    let lowestAuxReview = null;
+    let highestAuxReview = null;
+    _.forEach(restaurant.reviews, review => {
+      let addToReviewList = true;
+      if (review.user === user.id) setAlreadyReviewed(true);
+      if (!highestAuxReview || review.rating > highestAuxReview.rating) {
+        addToReviewList = false;
+        highestAuxReview = review;
+      }
+      if (!lowestAuxReview || review.rating < lowestAuxReview.rating) {
+        addToReviewList = false;
+        lowestAuxReview = review;
+      }
+      if (addToReviewList) restaurantReviews.push(review);
+    });
+    setHighestRatedReview(highestAuxReview);
+    setLowestRatedReview(lowestAuxReview);
+    setReviews(restaurantReviews);
   }, [restaurant, user]);
 
   useLayoutEffect(() => {
@@ -87,8 +96,19 @@ const RestaurantDetails = ({ route, navigation }) => {
         <View style={{ alignItems: 'center' }}>
           <Text style={{ fontSize: 15, fontWeight: 'bold' }}>Reviews</Text>
         </View>
-        {myReview && <Review restaurant={restaurant} review={myReview} />}
-        {!myReview && !checkIfUserRestaurantOwner(user, restaurant) && (
+        {highestRatedReview && (
+          <View>
+            <Text style={{ marginTop: 10, fontSize: 16, fontWeight: 'bold' }}>Highest Rated Review</Text>
+            <Review restaurant={restaurant} review={highestRatedReview} />
+          </View>
+        )}
+        {lowestRatedReview && (
+          <View>
+            <Text style={{ marginTop: 10, fontSize: 16, fontWeight: 'bold' }}>Lowest Rated Review</Text>
+            <Review restaurant={restaurant} review={lowestRatedReview} />
+          </View>
+        )}
+        {!alreadyReviewed && !checkIfUserRestaurantOwner(user, restaurant) && (
           <Button title="Write an review!" onPress={openNewReviewPage} />
         )}
         {_.map(reviews, (review, index) => (
