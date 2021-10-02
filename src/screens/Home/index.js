@@ -1,12 +1,13 @@
 import { useFocusEffect } from '@react-navigation/core';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Button, FlatList, StyleSheet } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import FilterSort from '../../components/FilterSort';
 import RestaurantCard from '../../components/RestaurantCard';
 import Screen from '../../components/Screen';
 import { ORDER } from '../../constants';
 import routes from '../../navigation/routes';
+import { setUser } from '../../redux/actions/user';
 import RestaurantService from '../../services/RestaurantService';
 import {
   checkIfUserRoleIsOwner,
@@ -18,6 +19,7 @@ const Home = ({ navigation }) => {
   const [refreshing, setRefreshing] = useState(false);
   const [order, setOrder] = useState(ORDER.DESC);
   const user = useSelector(state => state.user);
+  const dispatch = useDispatch();
 
   useFocusEffect(
     useCallback(() => {
@@ -46,12 +48,17 @@ const Home = ({ navigation }) => {
     navigation.navigate(routes.EDIT_RESTAURANT);
   };
 
+  const onLogout = () => {
+    dispatch(setUser(null));
+  };
+
   return (
     <Screen style={styles.container} scroll={false}>
       <FilterSort order={order} onChangeOrder={setOrder} />
       {userCanCreateRestaurants(user) && (
         <Button title="New Restaurant" onPress={openNewRestaurantPage} />
       )}
+      <Button title="Logout" onPress={onLogout} />
       <FlatList
         style={styles.flatList}
         data={restaurants}

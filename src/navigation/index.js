@@ -4,15 +4,28 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import routes from './routes';
 import AuthStack from './AuthStack';
 import AppStack from './AppStack';
+import { useSelector } from 'react-redux';
 
 const Stack = createNativeStackNavigator();
 
 const Navigation = () => {
+  const user = useSelector(state => state.user);
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name={routes.APP_STACK} component={AppStack} options={{ headerShown: false }} />
-        {/* <Stack.Screen name={routes.AUTH_STACK} component={AuthStack} options={{ headerShown: false }} /> */}
+        {user ? (
+          <Stack.Screen
+            name={routes.APP_STACK}
+            component={AppStack}
+            options={{ headerShown: false }}
+          />
+        ) : (
+          <Stack.Screen
+            name={routes.AUTH_STACK}
+            component={AuthStack}
+            options={{ headerShown: false }}
+          />
+        )}
       </Stack.Navigator>
     </NavigationContainer>
   );
