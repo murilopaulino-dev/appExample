@@ -1,6 +1,7 @@
 import { ORDER } from '../../constants';
 import { calculateRestaurantAverageRating } from '../../utils/restaurant';
-import { query, save, deleteDoc, get } from '../firebase';
+import Firebase from '../firebase';
+import api from '../axios/firestore';
 
 const END_POINT = 'restaurants';
 
@@ -9,9 +10,11 @@ const DEFAULT_SORT = {
   order: ORDER.DESC,
 };
 
+const FirebaseService = new Firebase(api);
+
 class RestaurantService {
   static async getRestaurant(restaurantId) {
-    return await get(`${END_POINT}/${restaurantId}`);
+    return await FirebaseService.get(`${END_POINT}/${restaurantId}`);
   }
 
   static async getAllRestaurants(filter = [], order) {
@@ -19,21 +22,16 @@ class RestaurantService {
       field: DEFAULT_SORT.field,
       order: order || DEFAULT_SORT.order,
     };
-    return await query(END_POINT, filter, sort);
+    return await FirebaseService.query(END_POINT, filter, sort);
   }
-
-  // static async getMyRestaurants(userId, filter = [], sort = DEFAULT_SORT) {
-  //   filter.push(['owner', '==', userId]);
-  //   return await query(END_POINT, filter, sort);
-  // }
 
   static async saveRestaurant(restaurant) {
     const restaurantWithAverageRating = calculateRestaurantAverageRating(restaurant);
-    return await save(END_POINT, restaurantWithAverageRating);
+    return await FirebaseService.save(END_POINT, restaurantWithAverageRating);
   }
 
   static async deleteRestaurant(id) {
-    return await deleteDoc(END_POINT, id);
+    return await FirebaseService.deleteDoc(END_POINT, id);
   }
 }
 
