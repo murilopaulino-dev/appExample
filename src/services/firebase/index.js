@@ -17,7 +17,13 @@ export const get = async endPoint => {
       status: response.status,
     };
   }
-  return response.data.documents.map(doc => docMapper(doc.fields));
+  if (response.data.documents?.length) {
+    return response.data.documents.map(doc => docMapper(doc.fields));
+  }
+  if (response.data.fields) {
+    return docMapper(response.data.fields);
+  }
+  return response.data;
 };
 
 export const save = (endPoint, data) => {

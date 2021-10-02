@@ -1,6 +1,6 @@
 import { ORDER } from '../../constants';
 import { calculateRestaurantAverageRating } from '../../utils/restaurant';
-import { query, save, deleteDoc } from '../firebase';
+import { query, save, deleteDoc, get } from '../firebase';
 
 const END_POINT = 'restaurants';
 
@@ -10,6 +10,10 @@ const DEFAULT_SORT = {
 };
 
 class RestaurantService {
+  static async getRestaurant(restaurantId) {
+    return await get(`${END_POINT}/${restaurantId}`);
+  }
+
   static async getAllRestaurants(filter = [], order) {
     const sort = {
       field: DEFAULT_SORT.field,

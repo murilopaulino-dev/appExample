@@ -4,7 +4,6 @@ import { store } from '../../redux/store';
 import Screen from '../../components/Screen';
 import { generateNewId } from '../../utils';
 import RestaurantService from '../../services/RestaurantService';
-import routes from '../../navigation/routes';
 
 const createNewReview = (comment, rating) => {
   const user = store.getState().user;
@@ -31,7 +30,7 @@ const NewReview = ({ route, navigation }) => {
       ],
     };
     await RestaurantService.saveRestaurant(newRestaurant);
-    navigation.navigate(routes.HOME);
+    navigation.goBack();
   }, [restaurant, comment, rating, navigation]);
 
   useLayoutEffect(() => {

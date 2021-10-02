@@ -8,7 +8,7 @@ const Restaurant = ({ data }) => {
   const { name, averageRating, id } = data;
 
   const openRestaurant = () => {
-    navigation.navigate(routes.RESTAURANT_DETAILS, data);
+    navigation.navigate(routes.RESTAURANT_DETAILS, { restaurantId: id });
   };
 
   return (
