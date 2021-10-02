@@ -47,7 +47,7 @@ const Home = ({ navigation }) => {
   };
 
   return (
-    <Screen style={styles.container}>
+    <Screen style={styles.container} scroll={false}>
       <FilterSort order={order} onChangeOrder={setOrder} />
       {userCanCreateRestaurants(user) && (
         <Button title="New Restaurant" onPress={openNewRestaurantPage} />
