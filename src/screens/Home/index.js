@@ -1,3 +1,4 @@
+import { useFocusEffect } from '@react-navigation/core';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Button, FlatList, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
@@ -18,9 +19,11 @@ const Home = ({ navigation }) => {
   const [order, setOrder] = useState(ORDER.DESC);
   const user = useSelector(state => state.user);
 
-  useEffect(() => {
-    fetchData(order);
-  }, [fetchData, order]);
+  useFocusEffect(
+    useCallback(() => {
+      fetchData();
+    }, [fetchData]),
+  );
 
   const fetchData = useCallback(async (sortOrder) => {
     setRefreshing(true);
@@ -40,7 +43,7 @@ const Home = ({ navigation }) => {
   );
 
   const openNewRestaurantPage = () => {
-    navigation.navigate(routes.NEW_EDIT_RESTAURANT);
+    navigation.navigate(routes.EDIT_RESTAURANT);
   };
 
   return (

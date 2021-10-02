@@ -15,6 +15,7 @@ import {
   checkIfUserRestaurantOwner,
 } from '../../utils/user';
 import RestaurantService from '../../services/RestaurantService';
+import { useFocusEffect } from '@react-navigation/core';
 
 const RestaurantDetails = ({ route, navigation }) => {
   const restaurantId = route.params.restaurantId;
@@ -23,6 +24,12 @@ const RestaurantDetails = ({ route, navigation }) => {
   const [myReview, setMyReview] = useState();
   const [loading, setLoading] = useState(false);
   const user = useSelector(state => state.user);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchRestaurant();
+    }, [fetchRestaurant]),
+  );
 
   const fetchRestaurant = useCallback(async () => {
     setLoading(true);
@@ -34,10 +41,6 @@ const RestaurantDetails = ({ route, navigation }) => {
     }
     setLoading(false);
   }, [restaurantId]);
-
-  useEffect(() => {
-    fetchRestaurant();
-  }, [fetchRestaurant]);
 
   useEffect(() => {
     const restaurantReviews = restaurant.reviews;
