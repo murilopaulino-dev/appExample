@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { Button, Text, TextInput } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../../redux/actions/user';
 import AuthUserService from '../../services/AuthUserService';
-import Screen from '../../components/Screen';
 import routes from '../../navigation/routes';
+import AuthContent from '../AuthContent';
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState();
@@ -26,14 +25,17 @@ const Login = ({ navigation }) => {
   const goToSignUpScreen = () => navigation.navigate(routes.SIGN_UP);
 
   return (
-    <Screen>
-      <Text>Email</Text>
-      <TextInput value={email} onChangeText={setEmail} style={{ borderBottomWidth: 1, flex: 1, marginHorizontal: 10 }} autoCapitalize="none" />
-      <Text>Password</Text>
-      <TextInput value={password} onChangeText={setPassword} style={{ borderBottomWidth: 1, flex: 1, marginHorizontal: 10 }} secureTextEntry autoCapitalize="none" />
-      <Button title="Login" onPress={onLogin} />
-      <Button title="Sign Up" onPress={goToSignUpScreen} />
-    </Screen>
+    <AuthContent
+      email={email}
+      setEmail={setEmail}
+      password={password}
+      setPassword={setPassword}
+      onSubmit={onLogin}
+      submitText="Login"
+      isLogin={true}
+      loading={loading}
+      goToSignUpScreen={goToSignUpScreen}
+    />
   );
 };
 

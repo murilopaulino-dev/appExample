@@ -1,12 +1,14 @@
 import React from 'react';
 import { SafeAreaView, ScrollView, View } from 'react-native';
 
-const Screen = ({ children, scroll = true, ...props }) => {
+const Screen = ({ children, style, innerStyle, scroll = true, ...props }) => {
   const ViewComponent = scroll ? ScrollView : View;
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <ViewComponent {...props}>{children}</ViewComponent>
-    </SafeAreaView>
+    <View style={[{ flex: 1 }, style]}>
+      <SafeAreaView style={[{ flex: 1 }, innerStyle]}>
+        <ViewComponent {...props}>{children}</ViewComponent>
+      </SafeAreaView>
+    </View>
   );
 };
 

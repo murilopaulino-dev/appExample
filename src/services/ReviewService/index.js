@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import { ORDER } from '../../constants';
-import { calculateRestaurantAverageRating } from '../../utils/restaurant';
 import Firebase from '../firebase';
 import api from '../axios/firestore';
 import RestaurantService from '../RestaurantService';
@@ -32,11 +31,9 @@ class ReviewService {
     return await FirebaseService.query(END_POINT, reviewsFilter);
   }
 
-  static async saveReview(review, restaurant) {
+  static async saveReview(review) {
     review.rating = Number(review.rating);
-    const restaurantWithAverageRating = calculateRestaurantAverageRating(restaurant, review);
     review.isAnswered = !!review.answer;
-    await RestaurantService.saveRestaurant(restaurantWithAverageRating);
     return await FirebaseService.save(END_POINT, review);
   }
 

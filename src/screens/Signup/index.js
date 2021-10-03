@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Text, SafeAreaView, TextInput, Button } from 'react-native';
-import Screen from '../../components/Screen';
 import AuthUserService from '../../services/AuthUserService';
+import AuthContent from '../AuthContent';
 
 const Signup = ({ navigation }) => {
   const [email, setEmail] = useState();
@@ -18,14 +17,17 @@ const Signup = ({ navigation }) => {
     }
     setLoading(true);
   };
+
   return (
-    <Screen>
-      <Text>Email</Text>
-      <TextInput value={email} onChangeText={setEmail} style={{ borderBottomWidth: 1, flex: 1, marginHorizontal: 10 }} autoCapitalize="none" />
-      <Text>Password</Text>
-      <TextInput value={password} onChangeText={setPassword} style={{ borderBottomWidth: 1, flex: 1, marginHorizontal: 10 }} secureTextEntry autoCapitalize="none" />
-      <Button title="Sign Up" onPress={onSingUp} />
-    </Screen>
+    <AuthContent
+      email={email}
+      setEmail={setEmail}
+      password={password}
+      setPassword={setPassword}
+      onSubmit={onSingUp}
+      submitText="Sign Up"
+      loading={loading}
+    />
   );
 };
 

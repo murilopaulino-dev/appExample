@@ -8,8 +8,8 @@ const Stack = createNativeStackNavigator();
 
 const AuthStack = () => (
   <Stack.Navigator>
-    <Stack.Screen name={routes.LOGIN} component={Login} options={{ title: 'Login' }} />
-    <Stack.Screen name={routes.SIGN_UP} component={Signup} options={{ title: 'Sign Up' }} />
+    <Stack.Screen name={routes.LOGIN} component={Login} options={{ headerShown: false }} />
+    <Stack.Screen name={routes.SIGN_UP} component={Signup} options={{ headerShown: false  }} />
   </Stack.Navigator>
 );
 

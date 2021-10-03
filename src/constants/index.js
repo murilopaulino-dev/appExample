@@ -14,3 +14,9 @@ export const ORDER = {
   ASC: 'asc',
   DESC: 'desc',
 };
+
+export const COLORS = {
+  primaryColor: '#800080',
+  secondaryColor: '#FFFACD',
+  backgroudColor: '#D2D2D2',
+};
