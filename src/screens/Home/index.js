@@ -10,6 +10,7 @@ import routes from '../../navigation/routes';
 import { setUser } from '../../redux/actions/user';
 import RestaurantService from '../../services/RestaurantService';
 import {
+  checkIfUserIsAdmin,
   checkIfUserRoleIsOwner,
   userCanCreateRestaurants,
 } from '../../utils/user';
@@ -52,6 +53,10 @@ const Home = ({ navigation }) => {
     navigation.navigate(routes.REVIEWS_PENDING_REPLY);
   };
 
+  const onOpenUsersListScreen = () => {
+    navigation.navigate(routes.USERS_LIST);
+  };
+
   const onLogout = () => {
     dispatch(setUser(null));
   };
@@ -68,6 +73,9 @@ const Home = ({ navigation }) => {
           title="Reviews Pending Reply"
           onPress={onOpenPendingReplyScreen}
         />
+      )}
+      {checkIfUserIsAdmin(user) && (
+        <Button title="Manage Users" onPress={onOpenUsersListScreen} />
       )}
       <FlatList
         style={styles.flatList}

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Text, SafeAreaView, TextInput, Button } from 'react-native';
 import Screen from '../../components/Screen';
-import UserService from '../../services/UserService';
+import AuthUserService from '../../services/AuthUserService';
 
 const Signup = ({ navigation }) => {
   const [email, setEmail] = useState();
@@ -11,7 +11,7 @@ const Signup = ({ navigation }) => {
   const onSingUp = async () => {
     setLoading(true);
     try {
-      await UserService.signUp({ email, password });
+      await AuthUserService.signUp({ email, password });
       navigation.goBack();
     } catch (error) {
       console.log('error', error.message, error.status, error.code);

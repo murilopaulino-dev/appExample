@@ -7,6 +7,8 @@ import UserSelector from '../screens/UserSelector';
 import EditRestaurant from '../screens/EditRestaurant';
 import NewReview from '../screens/NewReview';
 import ReviewsPendingReply from '../screens/ReviewsPendingReply';
+import UsersList from '../screens/UsersList';
+import UserDetails from '../screens/UserDetails';
 
 const Stack = createNativeStackNavigator();
 
@@ -18,6 +20,8 @@ const AppStack = () => (
     <Stack.Screen name={routes.EDIT_RESTAURANT} component={EditRestaurant} options={{ title: 'Rest' }} />
     <Stack.Screen name={routes.NEW_REVIEW} component={NewReview} options={{ title: 'Review' }} />
     <Stack.Screen name={routes.REVIEWS_PENDING_REPLY} component={ReviewsPendingReply} options={{ title: 'Reviews' }} />
+    <Stack.Screen name={routes.USERS_LIST} component={UsersList} options={{ title: 'Users' }} />
+    <Stack.Screen name={routes.USER_DETAILS} component={UserDetails} options={{ title: 'User' }} />
   </Stack.Navigator>
 );
 

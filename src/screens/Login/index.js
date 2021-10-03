@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Text, TextInput } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../../redux/actions/user';
-import UserService from '../../services/UserService';
+import AuthUserService from '../../services/AuthUserService';
 import Screen from '../../components/Screen';
 import routes from '../../navigation/routes';
 
@@ -15,7 +15,7 @@ const Login = ({ navigation }) => {
   const onLogin = async () => {
     setLoading(true);
     try {
-      const response = await UserService.login({ email, password });
+      const response = await AuthUserService.login({ email, password });
       dispatch(setUser(response));
     } catch (error) {
       console.log('error', error.message, error.status, error.code);
