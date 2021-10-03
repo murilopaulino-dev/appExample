@@ -1,11 +1,11 @@
 import { useFocusEffect } from '@react-navigation/core';
-import React, { useCallback, useEffect, useState } from 'react';
-import { Button, FlatList, StyleSheet } from 'react-native';
+import React, { useCallback, useState } from 'react';
+import { Button, FlatList, StyleSheet, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import FilterSort from '../../components/FilterSort';
 import RestaurantCard from '../../components/RestaurantCard';
 import Screen from '../../components/Screen';
-import { ORDER } from '../../constants';
+import { COLORS, ORDER } from '../../constants';
 import routes from '../../navigation/routes';
 import { setUser } from '../../redux/actions/user';
 import RestaurantService from '../../services/RestaurantService';
@@ -14,6 +14,7 @@ import {
   checkIfUserRoleIsOwner,
   userCanCreateRestaurants,
 } from '../../utils/user';
+import { getScreenHeightProportion } from '../../utils/screen';
 
 const Home = ({ navigation }) => {
   const [restaurants, setRestaurants] = useState([]);
@@ -28,21 +29,27 @@ const Home = ({ navigation }) => {
     }, [fetchData]),
   );
 
-  const fetchData = useCallback(async (sortOrder) => {
-    setRefreshing(true);
-    try {
-      const filter = [];
-      if (checkIfUserRoleIsOwner(user)) filter.push(['owner', '==', user.id]);
-      const response = await RestaurantService.getAllRestaurants(filter, sortOrder);
-      setRestaurants(response);
-    } catch (error) {
-      console.log('error', error);
-    }
-    setRefreshing(false);
-  }, [user]);
+  const fetchData = useCallback(
+    async sortOrder => {
+      setRefreshing(true);
+      try {
+        const filter = [];
+        if (checkIfUserRoleIsOwner(user)) filter.push(['owner', '==', user.id]);
+        const response = await RestaurantService.getAllRestaurants(
+          filter,
+          sortOrder,
+        );
+        setRestaurants(response);
+      } catch (error) {
+        console.log('error', error);
+      }
+      setRefreshing(false);
+    },
+    [user],
+  );
 
   const renderItem = ({ item: restaurant }) => (
-    <RestaurantCard data={restaurant} />
+    <RestaurantCard restaurant={restaurant} />
   );
 
   const openNewRestaurantPage = () => {
@@ -83,7 +90,7 @@ const Home = ({ navigation }) => {
         renderItem={renderItem}
         refreshing={refreshing}
         onRefresh={fetchData}
-        contentContainerStyle={{ padding: 10 }}
+        contentContainerStyle={styles.flatListContent}
       />
     </Screen>
   );
@@ -91,10 +98,13 @@ const Home = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    backgroundColor: COLORS.primaryColor,
   },
   flatList: {
-    flex: 1,
+    height: getScreenHeightProportion(),
+  },
+  flatListContent: {
+    padding: 10,
   },
 });
 
