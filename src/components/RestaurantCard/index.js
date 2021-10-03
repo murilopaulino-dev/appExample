@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import routes from '../../navigation/routes';
 import { COLORS } from '../../constants';
 
-const Restaurant = ({ restaurant }) => {
+const Restaurant = ({ restaurant, style, nameStyle }) => {
   const navigation = useNavigation();
   const { name, averageRating, id } = restaurant;
 
@@ -13,8 +13,10 @@ const Restaurant = ({ restaurant }) => {
   };
 
   return (
-    <TouchableOpacity style={styles.container} onPress={openRestaurant}>
-      <Text style={styles.name}>{name}</Text>
+    <TouchableOpacity
+      style={[styles.container, style]}
+      onPress={openRestaurant}>
+      <Text style={[styles.name, nameStyle]}>{name}</Text>
       <Text>Rating: {averageRating}</Text>
     </TouchableOpacity>
   );

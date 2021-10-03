@@ -4,7 +4,7 @@ import React, {
   useLayoutEffect,
   useState,
 } from 'react';
-import { ActivityIndicator, Button, Text, View } from 'react-native';
+import { ActivityIndicator, Text, View } from 'react-native';
 import _ from 'lodash';
 import Screen from '../../components/Screen';
 import routes from '../../navigation/routes';
@@ -17,6 +17,9 @@ import {
 import RestaurantService from '../../services/RestaurantService';
 import { useFocusEffect } from '@react-navigation/core';
 import ReviewService from '../../services/ReviewService';
+import { COLORS } from '../../constants';
+import RestaurantCard from '../../components/RestaurantCard';
+import Button from '../../components/Button';
 
 const removeFromReviews = (reviews = [], reviewToRemoveId) => {
   if (!reviews.length || !reviewToRemoveId) return;
@@ -94,44 +97,45 @@ const RestaurantDetails = ({ route, navigation }) => {
     navigation.navigate(routes.NEW_REVIEW, { restaurant });
   };
 
-  if (loading) return <ActivityIndicator />;
-
   return (
-    <Screen>
-      <Text>{restaurant.name}</Text>
-      <Text>{restaurant.date?.toLocaleDateString() || 'No date'}</Text>
-      <Text>Rating: {restaurant.averageRating}</Text>
-      <View style={{ marginTop: 15 }}>
-        {highestRatedReview && (
-          <View>
-            <View style={{ alignItems: 'center' }}>
-              <Text style={{ fontSize: 15, fontWeight: 'bold' }}>Highest Rated Review</Text>
+    <Screen style={{backgroundColor: COLORS.backgroudColor }}>
+      {loading && <ActivityIndicator />}
+      {!loading && (
+        <>
+          <RestaurantCard restaurant={restaurant} nameStyle={{fontSize: 20}} />
+          {!alreadyReviewed && !checkIfUserRestaurantOwner(user, restaurant) && (
+            <Button title="Write an review!" onPress={openNewReviewPage} />
+          )}
+          <View style={{ marginTop: 15 }}>
+            {highestRatedReview && (
+              <View style={{marginTop: 10}}>
+                <View style={{ alignItems: 'center' }}>
+                  <Text style={{ fontSize: 15, fontWeight: 'bold', color: COLORS.primaryColor }}>Highest Rated Review</Text>
+                </View>
+                <Review restaurant={restaurant} review={highestRatedReview} />
+              </View>
+            )}
+            {lowestRatedReview && (
+              <View style={{marginTop: 10}}>
+                <View style={{ alignItems: 'center' }}>
+                  <Text style={{ fontSize: 15, fontWeight: 'bold', color: COLORS.primaryColor }}>Lowest Rated Review</Text>
+                </View>
+                <Review restaurant={restaurant} review={lowestRatedReview} />
+              </View>
+            )}
+            <View style={{ alignItems: 'center', marginTop: 10 }}>
+              <Text style={{ fontSize: 15, fontWeight: 'bold', color: COLORS.primaryColor }}>Reviews</Text>
             </View>
-            <Review restaurant={restaurant} review={highestRatedReview} />
+            {_.map(filteredReviews, (review, index) => (
+              <Review
+                key={`review-${index}`}
+                restaurant={restaurant}
+                review={review}
+              />
+            ))}
           </View>
-        )}
-        {lowestRatedReview && (
-          <View>
-            <View style={{ alignItems: 'center' }}>
-              <Text style={{ fontSize: 15, fontWeight: 'bold' }}>Lowest Rated Review</Text>
-            </View>
-            <Review restaurant={restaurant} review={lowestRatedReview} />
-          </View>
-        )}
-        {!alreadyReviewed && !checkIfUserRestaurantOwner(user, restaurant) && (
-          <Button title="Write an review!" onPress={openNewReviewPage} />
-        )}
-        <View style={{ alignItems: 'center' }}>
-          <Text style={{ fontSize: 15, fontWeight: 'bold' }}>Reviews</Text>
-        </View>
-        {_.map(filteredReviews, (review, index) => (
-          <Review
-            key={`review-${index}`}
-            restaurant={restaurant}
-            review={review}
-          />
-        ))}
-      </View>
+        </>
+      )}
     </Screen>
   );
 };

@@ -9,19 +9,48 @@ import NewReview from '../screens/NewReview';
 import ReviewsPendingReply from '../screens/ReviewsPendingReply';
 import UsersList from '../screens/UsersList';
 import UserDetails from '../screens/UserDetails';
+import { COLORS } from '../constants';
 
 const Stack = createNativeStackNavigator();
 
 const AppStack = () => (
   <Stack.Navigator>
     {/* <Stack.Screen name={routes.USER_SELECTOR} component={UserSelector} options={{ title: 'User Selector' }} /> */}
-    <Stack.Screen name={routes.HOME} component={Home} options={{ title: 'Welcome' }} />
-    <Stack.Screen name={routes.RESTAURANT_DETAILS} component={RestaurantDetails} options={{ title: 'Rest' }} />
-    <Stack.Screen name={routes.EDIT_RESTAURANT} component={EditRestaurant} options={{ title: 'Rest' }} />
-    <Stack.Screen name={routes.NEW_REVIEW} component={NewReview} options={{ title: 'Review' }} />
-    <Stack.Screen name={routes.REVIEWS_PENDING_REPLY} component={ReviewsPendingReply} options={{ title: 'Reviews' }} />
-    <Stack.Screen name={routes.USERS_LIST} component={UsersList} options={{ title: 'Users' }} />
-    <Stack.Screen name={routes.USER_DETAILS} component={UserDetails} options={{ title: 'User' }} />
+    <Stack.Screen
+      name={routes.HOME}
+      component={Home}
+      options={{ headerShown: false }}
+    />
+    <Stack.Screen
+      name={routes.RESTAURANT_DETAILS}
+      component={RestaurantDetails}
+      options={{ headerShown: false }}
+    />
+    <Stack.Screen
+      name={routes.EDIT_RESTAURANT}
+      component={EditRestaurant}
+      options={{ title: 'Rest' }}
+    />
+    <Stack.Screen
+      name={routes.NEW_REVIEW}
+      component={NewReview}
+      options={{ title: 'Review' }}
+    />
+    <Stack.Screen
+      name={routes.REVIEWS_PENDING_REPLY}
+      component={ReviewsPendingReply}
+      options={{ title: 'Reviews' }}
+    />
+    <Stack.Screen
+      name={routes.USERS_LIST}
+      component={UsersList}
+      options={{ title: 'Users' }}
+    />
+    <Stack.Screen
+      name={routes.USER_DETAILS}
+      component={UserDetails}
+      options={{ title: 'User' }}
+    />
   </Stack.Navigator>
 );
 
