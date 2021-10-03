@@ -4,8 +4,9 @@ import { store } from '../../redux/store';
 import Screen from '../../components/Screen';
 import { generateNewId } from '../../utils';
 import RestaurantService from '../../services/RestaurantService';
+import ReviewService from '../../services/ReviewService';
 
-const createNewReview = (comment, rating) => {
+const createNewReview = (comment, rating, restaurantId) => {
   const user = store.getState().user;
   return {
     id: generateNewId(),
@@ -13,6 +14,8 @@ const createNewReview = (comment, rating) => {
     comment,
     date: new Date(),
     rating,
+    isAnswered: false,
+    restaurant: restaurantId,
   };
 };
 
@@ -22,14 +25,10 @@ const NewReview = ({ route, navigation }) => {
   const [rating, setRating] = useState();
 
   const onSave = useCallback(async () => {
-    const newRestaurant = {
-      ...restaurant,
-      reviews: [
-        ...(restaurant.reviews || []),
-        createNewReview(comment, rating),
-      ],
-    };
-    await RestaurantService.saveRestaurant(newRestaurant);
+    await ReviewService.saveReview(
+      createNewReview(comment, rating, restaurant.id),
+      restaurant,
+    );
     navigation.goBack();
   }, [restaurant, comment, rating, navigation]);
 

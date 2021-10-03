@@ -16,11 +16,13 @@ import {
 } from '../../utils/user';
 import RestaurantService from '../../services/RestaurantService';
 import { useFocusEffect } from '@react-navigation/core';
+import ReviewService from '../../services/ReviewService';
 
 const RestaurantDetails = ({ route, navigation }) => {
   const restaurantId = route.params.restaurantId;
   const [restaurant, setRestaurant] = useState({});
   const [reviews, setReviews] = useState([]);
+  const [filteredReviews, setFilteredReviews] = useState([]);
   const [highestRatedReview, setHighestRatedReview] = useState();
   const [lowestRatedReview, setLowestRatedReview] = useState();
   const [alreadyReviewed, setAlreadyReviewed] = useState(false);
@@ -36,8 +38,10 @@ const RestaurantDetails = ({ route, navigation }) => {
   const fetchRestaurant = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await RestaurantService.getRestaurant(restaurantId);
-      setRestaurant(response);
+      const restaurantResponse = await RestaurantService.getRestaurant(restaurantId);
+      const reviewsResponse = await ReviewService.getRestaurantReviews(restaurantId);
+      setRestaurant(restaurantResponse);
+      setReviews(reviewsResponse);
     } catch (error) {
       console.log('error', error);
     }
@@ -48,7 +52,7 @@ const RestaurantDetails = ({ route, navigation }) => {
     const restaurantReviews = [];
     let lowestAuxReview = null;
     let highestAuxReview = null;
-    _.forEach(restaurant.reviews, review => {
+    _.forEach(reviews, review => {
       let addToReviewList = true;
       if (review.user === user.id) setAlreadyReviewed(true);
       if (!highestAuxReview || review.rating > highestAuxReview.rating) {
@@ -63,8 +67,8 @@ const RestaurantDetails = ({ route, navigation }) => {
     });
     setHighestRatedReview(highestAuxReview);
     setLowestRatedReview(lowestAuxReview);
-    setReviews(restaurantReviews);
-  }, [restaurant, user]);
+    setFilteredReviews(restaurantReviews);
+  }, [reviews, user]);
 
   useLayoutEffect(() => {
     if (!checkIfUserIsAdminOrOwner(user, restaurant)) return;
@@ -111,7 +115,7 @@ const RestaurantDetails = ({ route, navigation }) => {
         {!alreadyReviewed && !checkIfUserRestaurantOwner(user, restaurant) && (
           <Button title="Write an review!" onPress={openNewReviewPage} />
         )}
-        {_.map(reviews, (review, index) => (
+        {_.map(filteredReviews, (review, index) => (
           <Review
             key={`review-${index}`}
             restaurant={restaurant}

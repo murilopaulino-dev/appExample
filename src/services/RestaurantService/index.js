@@ -1,5 +1,4 @@
 import { ORDER } from '../../constants';
-import { calculateRestaurantAverageRating } from '../../utils/restaurant';
 import Firebase from '../firebase';
 import api from '../axios/firestore';
 
@@ -26,12 +25,11 @@ class RestaurantService {
   }
 
   static async saveRestaurant(restaurant) {
-    const restaurantWithAverageRating = calculateRestaurantAverageRating(restaurant);
-    return await FirebaseService.save(END_POINT, restaurantWithAverageRating);
+    return await FirebaseService.save(END_POINT, restaurant);
   }
 
-  static async deleteRestaurant(id) {
-    return await FirebaseService.deleteDoc(END_POINT, id);
+  static async deleteRestaurant(restaurantId) {
+    return await FirebaseService.deleteDoc(END_POINT, restaurantId);
   }
 }
 

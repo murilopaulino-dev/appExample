@@ -17,10 +17,13 @@ const EditRestaurant = ({ route, navigation }) => {
     try {
       const restaurantDoc = {
         ...(editingRestaurant || {}),
-        id: editingRestaurant ? editingRestaurant.id : generateNewId(),
         name,
-        owner: editingRestaurant ? editingRestaurant.owner : user.id,
       };
+      if (!editingRestaurant) {
+        restaurantDoc.id = generateNewId;
+        restaurantDoc.owner = user.id;
+        restaurantDoc.averageRating = 0;
+      }
       await RestaurantService.saveRestaurant(restaurantDoc);
       navigation.navigate(routes.HOME);
     } catch (error) {

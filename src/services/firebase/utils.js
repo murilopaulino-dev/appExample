@@ -7,7 +7,7 @@ const OPERATORS = {
 
 const FIELD_TYPE = {
   string: 'stringValue',
-  interger: 'integerValue',
+  integer: 'integerValue',
   double: 'doubleValue',
   boolean: 'booleanValue',
   object: 'mapValue',
@@ -23,7 +23,7 @@ const SORT_DIRECTION = {
 const getTypeOfField = fieldValue => {
   const fieldType = typeof fieldValue;
   if (fieldType === 'number') {
-    return Number.isInteger(fieldValue) ? FIELD_TYPE.interger : FIELD_TYPE.double;
+    return Number.isInteger(fieldValue) ? FIELD_TYPE.integer : FIELD_TYPE.double;
   }
   if (fieldType === 'object' && Array.isArray(fieldValue)) {
     return FIELD_TYPE.array;
@@ -153,6 +153,9 @@ const getFieldMapper = field => {
   }
   if (field.timestampValue) {
     return new Date(field.timestampValue);
+  }
+  if (field.integerValue) {
+    return Number(field.integerValue);
   }
   return Object.values(field)[0];
 };

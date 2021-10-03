@@ -1,33 +1,19 @@
 import React, { useState } from 'react';
 import { Button, Text, TextInput, View } from 'react-native';
 import { useSelector } from 'react-redux';
-import RestaurantService from '../../services/RestaurantService';
+import ReviewService from '../../services/ReviewService';
 import { checkIfUserRestaurantOwner } from '../../utils/user';
 
-const editReviewArray = (reviews, newReview) => {
-  const reviewIndex = reviews.findIndex(review => review.id === newReview.id);
-  if (reviewIndex < 0) return [];
-  reviews[reviewIndex] = newReview;
-  return reviews;
-};
-
 const Review = ({ restaurant, review }) => {
-  const { comment, answer, user, rating, date } = review || {};
+  const { comment, answer, user, rating, date, isAnswered } = review || {};
   const [answerField, setAnswerField] = useState('');
   const restaurantUser = useSelector(state => state.user);
   const userIsOwner = checkIfUserRestaurantOwner(restaurantUser, restaurant);
 
   const editReview = async (field, newValue) => {
     try {
-      const newReview = {
-        ...review,
-        [field]: newValue,
-      };
-      const newRestaurant = {
-        ...restaurant,
-        reviews: editReviewArray(restaurant.reviews, newReview),
-      };
-      await RestaurantService.saveRestaurant(newRestaurant);
+      review[field] = newValue;
+      await ReviewService.saveReview(review, restaurant);
     } catch (error) {
       console.log('error', error);
     }
@@ -38,8 +24,8 @@ const Review = ({ restaurant, review }) => {
       <Text>Review by {user}</Text>
       <Text>Comment: {comment}</Text>
       <Text>Date: {date?.toLocaleDateString() || 'No Date'}</Text>
-      {!!answer && <Text>Answer: {answer}</Text>}
-      {userIsOwner && !answer && (
+      {isAnswered && <Text>Answer: {answer}</Text>}
+      {userIsOwner && !isAnswered && (
         <View style={{ flexDirection: 'row' }}>
           <Text>Answer</Text>
           <TextInput value={answerField} onChangeText={setAnswerField} style={{ borderBottomWidth: 1, flex: 1, marginHorizontal: 10 }} autoCapitalize="none" />
