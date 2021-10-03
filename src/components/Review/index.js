@@ -4,11 +4,13 @@ import { useSelector } from 'react-redux';
 import { COLORS } from '../../constants';
 import ReviewService from '../../services/ReviewService';
 import { checkIfUserRestaurantOwner } from '../../utils/user';
+import { Rating } from 'react-native-ratings';
+import { getScreenHeightProportion } from '../../utils/screen';
 
-const LabelValue = ({ label, value }) => (
+const LabelValue = ({ label, value, ...valueProps }) => (
   <View style={{ flexDirection: 'row', padding: 3 }}>
     <Text style={{ fontWeight: 'bold' }}>{label}: </Text>
-    <Text>{value}</Text>
+    <Text {...valueProps}>{value}</Text>
   </View>
 );
 
@@ -33,8 +35,14 @@ const Review = ({ restaurant, review, isOwner }) => {
   return (
     <View style={{ marginTop: 15, padding: 5, borderWidth: 2, borderRadius: 5, borderColor: COLORS.primaryColor, marginHorizontal: 5, backgroundColor: COLORS.secondaryColor }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-        <LabelValue label="Reviewed by" value={user} />
-        <LabelValue label="Ratitng" value={rating} />
+        <LabelValue label="Reviewed by" value={user} style={{width: getScreenHeightProportion(0.45)}} numberOfLines={1} />
+        <Rating
+          fractions={2}
+          startingValue={rating}
+          imageSize={15}
+          readonly
+          tintColor={COLORS.secondaryColor}
+        />
       </View>
       <LabelValue label="Comment" value={comment} />
       {isAnswered && <LabelValue label="Answer" value={answer} />}

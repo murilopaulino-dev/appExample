@@ -3,6 +3,7 @@ import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import routes from '../../navigation/routes';
 import { COLORS } from '../../constants';
+import { Rating } from 'react-native-ratings';
 
 const Restaurant = ({ restaurant, style, nameStyle }) => {
   const navigation = useNavigation();
@@ -17,7 +18,13 @@ const Restaurant = ({ restaurant, style, nameStyle }) => {
       style={[styles.container, style]}
       onPress={openRestaurant}>
       <Text style={[styles.name, nameStyle]}>{name}</Text>
-      <Text>Rating: {averageRating}</Text>
+      <Rating
+        fractions={2}
+        readonly
+        startingValue={averageRating}
+        imageSize={25}
+        tintColor={COLORS.backgroudColor}
+      />
     </TouchableOpacity>
   );
 };

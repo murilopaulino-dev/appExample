@@ -3,8 +3,9 @@ import { Button, Text, TextInput, View } from 'react-native';
 import { store } from '../../redux/store';
 import Screen from '../../components/Screen';
 import { generateNewId } from '../../utils';
-import RestaurantService from '../../services/RestaurantService';
 import ReviewService from '../../services/ReviewService';
+import { Rating } from 'react-native-ratings';
+import { COLORS } from '../../constants';
 
 const createNewReview = (comment, rating, restaurantId) => {
   const user = store.getState().user;
@@ -22,7 +23,7 @@ const createNewReview = (comment, rating, restaurantId) => {
 const NewReview = ({ route, navigation }) => {
   const restaurant = route.params.restaurant;
   const [comment, setComment] = useState('');
-  const [rating, setRating] = useState();
+  const [rating, setRating] = useState(3);
 
   const onSave = useCallback(async () => {
     await ReviewService.saveReview(
@@ -38,6 +39,8 @@ const NewReview = ({ route, navigation }) => {
     });
   }, [navigation, onSave]);
 
+  console.log('rating', rating);
+
   return (
     <Screen>
       <View style={{ flexDirection: 'row' }}>
@@ -46,7 +49,13 @@ const NewReview = ({ route, navigation }) => {
       </View>
       <View style={{ flexDirection: 'row' }}>
         <Text>Rating</Text>
-        <TextInput value={rating} onChangeText={setRating} style={{ borderBottomWidth: 1, flex: 1, marginHorizontal: 10 }} autoCapitalize="none" />
+        <Rating
+          fractions={2}
+          startingValue={rating}
+          imageSize={25}
+          onFinishRating={setRating}
+          tintColor={COLORS.backgroudColor}
+        />
       </View>
     </Screen>
   );
