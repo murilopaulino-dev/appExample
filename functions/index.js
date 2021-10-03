@@ -21,7 +21,7 @@ exports.modifyReview = functions.firestore
           const review = reviewDoc.data();
           ratingSum += review.rating;
         });
-        const averageRating = ratingSum / reviews.size;
+        const averageRating = Number((ratingSum / reviews.size).toFixed(2));
         await restaurantQuery.update({ averageRating });
       }
     });
