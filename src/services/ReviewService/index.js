@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { ORDER } from '../../constants';
 import { calculateRestaurantAverageRating } from '../../utils/restaurant';
 import Firebase from '../firebase';
@@ -23,11 +24,24 @@ class ReviewService {
     return await FirebaseService.query(END_POINT, filter, DEFAULT_SORT);
   }
 
+  static async getReviewsPendingReply(userId) {
+    const restaurantsFilter = [['owner', '==', userId]];
+    const userRestaurants = await RestaurantService.getAllRestaurants(restaurantsFilter);
+    const restaurantsIds = _.map(userRestaurants, 'id');
+    const reviewsFilter = [['restaurant', 'IN', restaurantsIds]];
+    return await FirebaseService.query(END_POINT, reviewsFilter);
+  }
+
   static async saveReview(review, restaurant) {
     review.rating = Number(review.rating);
     const restaurantWithAverageRating = calculateRestaurantAverageRating(restaurant, review);
     review.isAnswered = !!review.answer;
     await RestaurantService.saveRestaurant(restaurantWithAverageRating);
+    return await FirebaseService.save(END_POINT, review);
+  }
+
+  static async replyReview(review) {
+    review.isAnswered = true;
     return await FirebaseService.save(END_POINT, review);
   }
 

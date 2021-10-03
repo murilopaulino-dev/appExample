@@ -18,6 +18,12 @@ import RestaurantService from '../../services/RestaurantService';
 import { useFocusEffect } from '@react-navigation/core';
 import ReviewService from '../../services/ReviewService';
 
+const removeFromReviews = (reviews = [], reviewToRemoveId) => {
+  if (!reviews.length || !reviewToRemoveId) return;
+  const reviewIndex = _.findIndex(reviews, { id: reviewToRemoveId });
+  reviews.splice(reviewIndex, 1);
+};
+
 const RestaurantDetails = ({ route, navigation }) => {
   const restaurantId = route.params.restaurantId;
   const [restaurant, setRestaurant] = useState({});
@@ -53,20 +59,19 @@ const RestaurantDetails = ({ route, navigation }) => {
     let lowestAuxReview = null;
     let highestAuxReview = null;
     _.forEach(reviews, review => {
-      let addToReviewList = true;
       if (review.user === user.id) setAlreadyReviewed(true);
       if (!highestAuxReview || review.rating > highestAuxReview.rating) {
-        addToReviewList = false;
         highestAuxReview = review;
       }
       if (!lowestAuxReview || review.rating < lowestAuxReview.rating) {
-        addToReviewList = false;
         lowestAuxReview = review;
       }
-      if (addToReviewList) restaurantReviews.push(review);
+      restaurantReviews.push(review);
     });
     setHighestRatedReview(highestAuxReview);
     setLowestRatedReview(lowestAuxReview);
+    removeFromReviews(restaurantReviews, highestAuxReview?.id);
+    removeFromReviews(restaurantReviews, lowestAuxReview?.id);
     setFilteredReviews(restaurantReviews);
   }, [reviews, user]);
 
@@ -97,24 +102,28 @@ const RestaurantDetails = ({ route, navigation }) => {
       <Text>{restaurant.date?.toLocaleDateString() || 'No date'}</Text>
       <Text>Rating: {restaurant.averageRating}</Text>
       <View style={{ marginTop: 15 }}>
-        <View style={{ alignItems: 'center' }}>
-          <Text style={{ fontSize: 15, fontWeight: 'bold' }}>Reviews</Text>
-        </View>
         {highestRatedReview && (
           <View>
-            <Text style={{ marginTop: 10, fontSize: 16, fontWeight: 'bold' }}>Highest Rated Review</Text>
+            <View style={{ alignItems: 'center' }}>
+              <Text style={{ fontSize: 15, fontWeight: 'bold' }}>Highest Rated Review</Text>
+            </View>
             <Review restaurant={restaurant} review={highestRatedReview} />
           </View>
         )}
         {lowestRatedReview && (
           <View>
-            <Text style={{ marginTop: 10, fontSize: 16, fontWeight: 'bold' }}>Lowest Rated Review</Text>
+            <View style={{ alignItems: 'center' }}>
+              <Text style={{ fontSize: 15, fontWeight: 'bold' }}>Lowest Rated Review</Text>
+            </View>
             <Review restaurant={restaurant} review={lowestRatedReview} />
           </View>
         )}
         {!alreadyReviewed && !checkIfUserRestaurantOwner(user, restaurant) && (
           <Button title="Write an review!" onPress={openNewReviewPage} />
         )}
+        <View style={{ alignItems: 'center' }}>
+          <Text style={{ fontSize: 15, fontWeight: 'bold' }}>Reviews</Text>
+        </View>
         {_.map(filteredReviews, (review, index) => (
           <Review
             key={`review-${index}`}

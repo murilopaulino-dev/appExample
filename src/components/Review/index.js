@@ -1,22 +1,25 @@
 import React, { useState } from 'react';
-import { Button, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, Button, Text, TextInput, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import ReviewService from '../../services/ReviewService';
 import { checkIfUserRestaurantOwner } from '../../utils/user';
 
-const Review = ({ restaurant, review }) => {
+const Review = ({ restaurant, review, isOwner }) => {
   const { comment, answer, user, rating, date, isAnswered } = review || {};
   const [answerField, setAnswerField] = useState('');
+  const [loading, setLoading] = useState(false);
   const restaurantUser = useSelector(state => state.user);
-  const userIsOwner = checkIfUserRestaurantOwner(restaurantUser, restaurant);
+  const userIsOwner = isOwner || checkIfUserRestaurantOwner(restaurantUser, restaurant);
 
-  const editReview = async (field, newValue) => {
+  const replyReview = async () => {
+    setLoading(true);
     try {
-      review[field] = newValue;
-      await ReviewService.saveReview(review, restaurant);
+      review.answer = answerField;
+      await ReviewService.replyReview(review);
     } catch (error) {
       console.log('error', error);
     }
+    setLoading(false);
   };
 
   return (
@@ -29,7 +32,8 @@ const Review = ({ restaurant, review }) => {
         <View style={{ flexDirection: 'row' }}>
           <Text>Answer</Text>
           <TextInput value={answerField} onChangeText={setAnswerField} style={{ borderBottomWidth: 1, flex: 1, marginHorizontal: 10 }} autoCapitalize="none" />
-          <Button title="Reply" onPress={() => editReview('answer', answerField)} />
+          {!loading && <Button title="Reply" onPress={replyReview} />}
+          {loading && <ActivityIndicator size="small" />}
         </View>
       )}
       <Text>Rating: {rating}</Text>

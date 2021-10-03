@@ -6,6 +6,7 @@ import RestaurantDetails from '../screens/RestaurantDetails';
 import UserSelector from '../screens/UserSelector';
 import EditRestaurant from '../screens/EditRestaurant';
 import NewReview from '../screens/NewReview';
+import ReviewsPendingReply from '../screens/ReviewsPendingReply';
 
 const Stack = createNativeStackNavigator();
 
@@ -16,6 +17,7 @@ const AppStack = () => (
     <Stack.Screen name={routes.RESTAURANT_DETAILS} component={RestaurantDetails} options={{ title: 'Rest' }} />
     <Stack.Screen name={routes.EDIT_RESTAURANT} component={EditRestaurant} options={{ title: 'Rest' }} />
     <Stack.Screen name={routes.NEW_REVIEW} component={NewReview} options={{ title: 'Review' }} />
+    <Stack.Screen name={routes.REVIEWS_PENDING_REPLY} component={ReviewsPendingReply} options={{ title: 'Reviews' }} />
   </Stack.Navigator>
 );
 

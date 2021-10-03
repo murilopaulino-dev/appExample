@@ -3,6 +3,7 @@ import { FIRESTORE_URL, ORDER } from '../../constants';
 
 const OPERATORS = {
   '==': 'EQUAL',
+  IN: 'IN',
 };
 
 const FIELD_TYPE = {
@@ -47,7 +48,7 @@ const mountFilterObj = filter => {
       },
       op: operator,
       value: {
-        [secondFieldType]: secondField,
+        [secondFieldType]: getFieldSaveValue(secondField, secondFieldType),
       },
     },
   };

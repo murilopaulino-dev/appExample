@@ -48,6 +48,10 @@ const Home = ({ navigation }) => {
     navigation.navigate(routes.EDIT_RESTAURANT);
   };
 
+  const onOpenPendingReplyScreen = () => {
+    navigation.navigate(routes.REVIEWS_PENDING_REPLY);
+  };
+
   const onLogout = () => {
     dispatch(setUser(null));
   };
@@ -59,6 +63,12 @@ const Home = ({ navigation }) => {
         <Button title="New Restaurant" onPress={openNewRestaurantPage} />
       )}
       <Button title="Logout" onPress={onLogout} />
+      {checkIfUserRoleIsOwner(user) && (
+        <Button
+          title="Reviews Pending Reply"
+          onPress={onOpenPendingReplyScreen}
+        />
+      )}
       <FlatList
         style={styles.flatList}
         data={restaurants}
