@@ -1,26 +1,44 @@
 import React, { useState } from 'react';
-import { ActivityIndicator, Text, TextInput, View } from 'react-native';
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { useSelector } from 'react-redux';
+import { useNavigation } from '@react-navigation/core';
 import { COLORS } from '../../constants';
 import ReviewService from '../../services/ReviewService';
-import { checkIfUserRestaurantOwner } from '../../utils/user';
+import {
+  checkIfUserIsAdmin,
+  checkIfUserRestaurantOwner,
+} from '../../utils/user';
 import { Rating } from 'react-native-ratings';
 import { getScreenHeightProportion } from '../../utils/screen';
 import Button from '../Button';
-
-const LabelValue = ({ label, value, ...valueProps }) => (
-  <View style={{ flexDirection: 'row', padding: 3 }}>
-    <Text style={{ fontWeight: 'bold' }}>{label}: </Text>
-    <Text {...valueProps}>{value}</Text>
-  </View>
-);
+import routes from '../../navigation/routes';
+import LabelValue from '../LabelValue';
 
 const Review = ({ restaurant, review, isOwner }) => {
-  const { comment, answer, user, rating, isAnswered } = review || {};
+  const {
+    comment,
+    answer,
+    user: userReview,
+    rating,
+    isAnswered,
+  } = review || {};
   const [answerField, setAnswerField] = useState('');
   const [loading, setLoading] = useState(false);
   const restaurantUser = useSelector(state => state.user);
-  const userIsOwner = isOwner || checkIfUserRestaurantOwner(restaurantUser, restaurant);
+  const navigation = useNavigation();
+  const user = useSelector(state => state.user);
+  const userIsAdmin = checkIfUserIsAdmin(user);
+  const userIsOwnerOrAdmin =
+    isOwner ||
+    userIsAdmin ||
+    checkIfUserRestaurantOwner(restaurantUser, restaurant);
 
   const replyReview = async () => {
     setLoading(true);
@@ -33,12 +51,19 @@ const Review = ({ restaurant, review, isOwner }) => {
     setLoading(false);
   };
 
+  const onOpenEditReviewPage = () => {
+    navigation.navigate(routes.EDIT_REVIEW, { restaurant, review });
+  };
+
   return (
-    <View style={{ marginTop: 15, padding: 5, borderWidth: 2, borderRadius: 5, borderColor: COLORS.primaryColor, marginHorizontal: 5, backgroundColor: COLORS.secondaryColor }}>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+    <TouchableOpacity
+      style={styles.container}
+      disabled={!userIsAdmin}
+      onPress={onOpenEditReviewPage}>
+      <View style={styles.header}>
         <LabelValue
           label="Reviewed by"
-          value={user}
+          value={userReview}
           style={{ width: getScreenHeightProportion(0.45) }}
           numberOfLines={1}
         />
@@ -52,21 +77,37 @@ const Review = ({ restaurant, review, isOwner }) => {
       </View>
       <LabelValue label="Comment" value={comment} />
       {isAnswered && <LabelValue label="Answer" value={answer} />}
-      {userIsOwner && !isAnswered && (
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Text style={{ padding: 3, fontWeight: 'bold' }}>Answer</Text>
+      {userIsOwnerOrAdmin && !isAnswered && (
+        <View style={styles.ownerContainer}>
+          <Text style={styles.answer}>Answer</Text>
           <TextInput
+            label="Answer"
             value={answerField}
             onChangeText={setAnswerField}
-            style={{ borderBottomWidth: 1, flex: 1, marginHorizontal: 10 }}
-            autoCapitalize="none"
+            style={styles.answerInput}
           />
           {!loading && <Button title="Reply" onPress={replyReview} />}
           {loading && <ActivityIndicator size="small" />}
         </View>
       )}
-    </View>
+    </TouchableOpacity>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    marginTop: 15,
+    padding: 5,
+    borderWidth: 2,
+    borderRadius: 5,
+    borderColor: COLORS.primaryColor,
+    marginHorizontal: 5,
+    backgroundColor: COLORS.secondaryColor,
+  },
+  header: { flexDirection: 'row', justifyContent: 'space-between' },
+  ownerContainer: { flexDirection: 'row', alignItems: 'center' },
+  answer: { padding: 3, fontWeight: 'bold' },
+  answerInput: { borderBottomWidth: 1, flex: 1, marginHorizontal: 10 },
+});
 
 export default React.memo(Review);

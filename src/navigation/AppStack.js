@@ -5,11 +5,10 @@ import Home from '../screens/Home';
 import RestaurantDetails from '../screens/RestaurantDetails';
 import UserSelector from '../screens/UserSelector';
 import EditRestaurant from '../screens/EditRestaurant';
-import NewReview from '../screens/NewReview';
+import EditReview from '../screens/EditReview';
 import ReviewsPendingReply from '../screens/ReviewsPendingReply';
 import UsersList from '../screens/UsersList';
 import UserDetails from '../screens/UserDetails';
-import { COLORS } from '../constants';
 
 const Stack = createNativeStackNavigator();
 
@@ -32,8 +31,8 @@ const AppStack = () => (
       options={{ headerShown: false }}
     />
     <Stack.Screen
-      name={routes.NEW_REVIEW}
-      component={NewReview}
+      name={routes.EDIT_REVIEW}
+      component={EditReview}
       options={{ headerShown: false }}
     />
     <Stack.Screen

@@ -26,20 +26,30 @@ const createNewReview = (comment, rating, restaurantId) => {
   };
 };
 
-const NewReview = ({ route, navigation }) => {
+const getEditingReview = (review, comment, answer, rating) => ({
+  ...review,
+  comment,
+  answer,
+  rating,
+});
+
+const EditReview = ({ route, navigation }) => {
   const restaurant = route.params.restaurant;
   const review = route.params.review;
-  const [comment, setComment] = useState('');
-  const [rating, setRating] = useState(3);
+  const [comment, setComment] = useState(review?.comment || '');
+  const [answer, setAnswer] = useState(review?.answer || '');
+  const [rating, setRating] = useState(review?.rating || 3);
   const editingReview = !!review;
 
   const onSave = useCallback(async () => {
     await ReviewService.saveReview(
-      createNewReview(comment, rating, restaurant.id),
+      editingReview
+        ? getEditingReview(review, comment, answer, rating)
+        : createNewReview(comment, rating, restaurant.id),
       restaurant,
     );
     navigation.goBack();
-  }, [restaurant, comment, rating, navigation]);
+  }, [editingReview, review, comment, answer, rating, restaurant, navigation]);
 
   return (
     <Screen
@@ -66,8 +76,8 @@ const NewReview = ({ route, navigation }) => {
         {editingReview && (
           <Field
             label="Answer"
-            value={comment}
-            onChangeText={setComment}
+            value={answer}
+            onChangeText={setAnswer}
             style={styles.marginTop}
           />
         )}
@@ -101,4 +111,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default React.memo(NewReview);
+export default React.memo(EditReview);

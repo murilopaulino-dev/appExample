@@ -11,6 +11,7 @@ import routes from '../../navigation/routes';
 import Review from '../../components/Review';
 import { useSelector } from 'react-redux';
 import {
+  checkIfUserIsAdmin,
   checkIfUserIsAdminOrOwner,
   checkIfUserRestaurantOwner,
 } from '../../utils/user';
@@ -47,8 +48,12 @@ const RestaurantDetails = ({ route, navigation }) => {
   const fetchRestaurant = useCallback(async () => {
     setLoading(true);
     try {
-      const restaurantResponse = await RestaurantService.getRestaurant(restaurantId);
-      const reviewsResponse = await ReviewService.getRestaurantReviews(restaurantId);
+      const restaurantResponse = await RestaurantService.getRestaurant(
+        restaurantId,
+      );
+      const reviewsResponse = await ReviewService.getRestaurantReviews(
+        restaurantId,
+      );
       setRestaurant(restaurantResponse);
       setReviews(reviewsResponse);
     } catch (error) {
@@ -78,53 +83,74 @@ const RestaurantDetails = ({ route, navigation }) => {
     setFilteredReviews(restaurantReviews);
   }, [reviews, user]);
 
-  useLayoutEffect(() => {
-    if (!checkIfUserIsAdminOrOwner(user, restaurant)) return;
-    navigation.setOptions({
-      headerRight: () => (
-        <Button
-          disabled={loading}
-          title="Edit"
-          onPress={() =>
-            navigation.navigate(routes.EDIT_RESTAURANT, restaurant)
-          }
-        />
-      ),
-    });
-  }, [navigation, restaurant, user, loading]);
-
   const openNewReviewPage = () => {
-    navigation.navigate(routes.NEW_REVIEW, { restaurant });
+    navigation.navigate(routes.EDIT_REVIEW, { restaurant });
+  };
+
+  const onOpenEditRestaurantPage = () => {
+    navigation.navigate(routes.EDIT_RESTAURANT, restaurant);
   };
 
   return (
-    <Screen style={{backgroundColor: COLORS.backgroudColor }}>
+    <Screen style={{ backgroundColor: COLORS.backgroudColor }}>
       {loading && <ActivityIndicator />}
       {!loading && (
         <>
-          <RestaurantCard restaurant={restaurant} nameStyle={{fontSize: 20}} />
-          {!alreadyReviewed && !checkIfUserRestaurantOwner(user, restaurant) && (
-            <Button title="Write an review!" onPress={openNewReviewPage} />
+          <RestaurantCard
+            restaurant={restaurant}
+            nameStyle={{ fontSize: 20 }}
+          />
+          {checkIfUserIsAdminOrOwner(user, restaurant) && (
+            <Button
+              title="Edit Restaurant"
+              onPress={onOpenEditRestaurantPage}
+              disabled={loading}
+            />
           )}
+          {!alreadyReviewed &&
+            !checkIfUserRestaurantOwner(user, restaurant) && (
+              <Button title="Write an review!" onPress={openNewReviewPage} />
+            )}
           <View style={{ marginTop: 15 }}>
             {highestRatedReview && (
-              <View style={{marginTop: 10}}>
+              <View style={{ marginTop: 10 }}>
                 <View style={{ alignItems: 'center' }}>
-                  <Text style={{ fontSize: 15, fontWeight: 'bold', color: COLORS.primaryColor }}>Highest Rated Review</Text>
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      fontWeight: 'bold',
+                      color: COLORS.primaryColor,
+                    }}>
+                    Highest Rated Review
+                  </Text>
                 </View>
                 <Review restaurant={restaurant} review={highestRatedReview} />
               </View>
             )}
             {lowestRatedReview && (
-              <View style={{marginTop: 10}}>
+              <View style={{ marginTop: 10 }}>
                 <View style={{ alignItems: 'center' }}>
-                  <Text style={{ fontSize: 15, fontWeight: 'bold', color: COLORS.primaryColor }}>Lowest Rated Review</Text>
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      fontWeight: 'bold',
+                      color: COLORS.primaryColor,
+                    }}>
+                    Lowest Rated Review
+                  </Text>
                 </View>
                 <Review restaurant={restaurant} review={lowestRatedReview} />
               </View>
             )}
             <View style={{ alignItems: 'center', marginTop: 10 }}>
-              <Text style={{ fontSize: 15, fontWeight: 'bold', color: COLORS.primaryColor }}>Reviews</Text>
+              <Text
+                style={{
+                  fontSize: 15,
+                  fontWeight: 'bold',
+                  color: COLORS.primaryColor,
+                }}>
+                Reviews
+              </Text>
             </View>
             {_.map(filteredReviews, (review, index) => (
               <Review
