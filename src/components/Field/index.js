@@ -4,7 +4,7 @@ import { StyleSheet, Text, TextInput, View } from 'react-native';
 const Field = ({ style, inputStyle, label, ...props }) => {
   return (
     <View style={style}>
-      <Text style={styles.labelStyle}>{label}</Text>
+      <Text>{label}</Text>
       <TextInput
         style={[styles.input, inputStyle]}
         autoCapitalize="none"
@@ -15,9 +15,6 @@ const Field = ({ style, inputStyle, label, ...props }) => {
 };
 
 const styles = StyleSheet.create({
-  label: {
-
-  },
   input: {
     borderBottomWidth: 1,
   },

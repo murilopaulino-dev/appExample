@@ -32,6 +32,7 @@ const AuthContent = ({
           value={password}
           onChangeText={setPassword}
           style={styles.margin}
+          secureTextEntry
         />
         <Button
           disabled={loading}

@@ -19,7 +19,7 @@ const Login = ({ navigation }) => {
     } catch (error) {
       console.log('error', error.message, error.status, error.code);
     }
-    setLoading(true);
+    setLoading(false);
   };
 
   const goToSignUpScreen = () => navigation.navigate(routes.SIGN_UP);

@@ -2,10 +2,13 @@ import React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { COLORS } from '../../constants';
 
-const Button = ({ title, style, titleStyle, ...props }) => {
+const Button = ({ title, style, titleStyle, disabled, ...props }) => {
   return (
     <TouchableOpacity style={[styles.container, style]} {...props}>
-      <Text style={[styles.title, titleStyle]}>{title}</Text>
+      <Text
+        style={[styles.title, titleStyle, disabled ? styles.disabled : null]}>
+        {title}
+      </Text>
     </TouchableOpacity>
   );
 };
@@ -18,6 +21,9 @@ const styles = StyleSheet.create({
   title: {
     color: COLORS.primaryColor,
     fontSize: 16,
+  },
+  disabled: {
+    color: '#757575',
   },
 });
 
