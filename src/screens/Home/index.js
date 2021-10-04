@@ -25,8 +25,8 @@ const Home = ({ navigation }) => {
 
   useFocusEffect(
     useCallback(() => {
-      fetchData();
-    }, [fetchData]),
+      fetchData(order);
+    }, [fetchData, order]),
   );
 
   const fetchData = useCallback(
