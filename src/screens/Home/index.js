@@ -20,20 +20,24 @@ const Home = ({ navigation }) => {
   const [restaurants, setRestaurants] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [order, setOrder] = useState(ORDER.DESC);
+  const [higherRatingFilter, setHigherRatingFilter] = useState();
+  const [lowerRatingFilter, setLowerRatingFilter] = useState();
   const user = useSelector(state => state.user);
   const dispatch = useDispatch();
 
   useFocusEffect(
     useCallback(() => {
-      fetchData(order);
-    }, [fetchData, order]),
+      fetchData(order, higherRatingFilter, lowerRatingFilter);
+    }, [fetchData, order, higherRatingFilter, lowerRatingFilter]),
   );
 
   const fetchData = useCallback(
-    async sortOrder => {
+    async (sortOrder, higherRating, lowerRating) => {
       setRefreshing(true);
       try {
         const filter = [];
+        if (higherRating) filter.push(['averageRating', '<=', higherRating]);
+        if (lowerRating) filter.push(['averageRating', '>=', lowerRating]);
         if (checkIfUserRoleIsOwner(user)) filter.push(['owner', '==', user.id]);
         const response = await RestaurantService.getAllRestaurants(
           filter,
@@ -70,7 +74,15 @@ const Home = ({ navigation }) => {
 
   return (
     <Screen style={styles.container} scroll={false}>
-      <FilterSort order={order} onChangeOrder={setOrder} />
+      <FilterSort
+        order={order}
+        onChangeOrder={setOrder}
+        higherRatingFilter={higherRatingFilter}
+        setHigherRatingFilter={setHigherRatingFilter}
+        lowerRatingFilter={lowerRatingFilter}
+        setLowerRatingFilter={setLowerRatingFilter}
+        loading={refreshing}
+      />
       {userCanCreateRestaurants(user) && (
         <Button title="New Restaurant" onPress={openNewRestaurantPage} />
       )}

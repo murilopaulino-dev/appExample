@@ -4,6 +4,8 @@ import { FIRESTORE_URL, ORDER } from '../../constants';
 const OPERATORS = {
   '==': 'EQUAL',
   IN: 'IN',
+  '>=': 'GREATER_THAN_OR_EQUAL',
+  '<=': 'LESS_THAN_OR_EQUAL',
 };
 
 const FIELD_TYPE = {
@@ -24,7 +26,9 @@ const SORT_DIRECTION = {
 const getTypeOfField = fieldValue => {
   const fieldType = typeof fieldValue;
   if (fieldType === 'number') {
-    return Number.isInteger(fieldValue) ? FIELD_TYPE.integer : FIELD_TYPE.double;
+    return Number.isInteger(fieldValue)
+      ? FIELD_TYPE.integer
+      : FIELD_TYPE.double;
   }
   if (fieldType === 'object' && Array.isArray(fieldValue)) {
     return FIELD_TYPE.array;
