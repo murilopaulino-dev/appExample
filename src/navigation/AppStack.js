@@ -29,27 +29,27 @@ const AppStack = () => (
     <Stack.Screen
       name={routes.EDIT_RESTAURANT}
       component={EditRestaurant}
-      options={{ title: 'Rest' }}
+      options={{ headerShown: false }}
     />
     <Stack.Screen
       name={routes.NEW_REVIEW}
       component={NewReview}
-      options={{ title: 'Review' }}
+      options={{ headerShown: false }}
     />
     <Stack.Screen
       name={routes.REVIEWS_PENDING_REPLY}
       component={ReviewsPendingReply}
-      options={{ title: 'Reviews' }}
+      options={{ headerShown: false }}
     />
     <Stack.Screen
       name={routes.USERS_LIST}
       component={UsersList}
-      options={{ title: 'Users' }}
+      options={{ headerShown: false }}
     />
     <Stack.Screen
       name={routes.USER_DETAILS}
       component={UserDetails}
-      options={{ title: 'User' }}
+      options={{ headerShown: false }}
     />
   </Stack.Navigator>
 );

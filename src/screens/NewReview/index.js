@@ -1,11 +1,17 @@
 import React, { useCallback, useLayoutEffect, useState } from 'react';
-import { Button, Text, TextInput, View } from 'react-native';
+import { Text, View, StyleSheet } from 'react-native';
 import { store } from '../../redux/store';
 import Screen from '../../components/Screen';
 import { generateNewId } from '../../utils';
 import ReviewService from '../../services/ReviewService';
 import { Rating } from 'react-native-ratings';
 import { COLORS } from '../../constants';
+import {
+  getScreenHeightProportion,
+  getScreenWidthProportion,
+} from '../../utils/screen';
+import Field from '../../components/Field';
+import Button from '../../components/Button';
 
 const createNewReview = (comment, rating, restaurantId) => {
   const user = store.getState().user;
@@ -22,8 +28,10 @@ const createNewReview = (comment, rating, restaurantId) => {
 
 const NewReview = ({ route, navigation }) => {
   const restaurant = route.params.restaurant;
+  const review = route.params.review;
   const [comment, setComment] = useState('');
   const [rating, setRating] = useState(3);
+  const editingReview = !!review;
 
   const onSave = useCallback(async () => {
     await ReviewService.saveReview(
@@ -33,32 +41,64 @@ const NewReview = ({ route, navigation }) => {
     navigation.goBack();
   }, [restaurant, comment, rating, navigation]);
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => <Button title="Save" onPress={onSave} />,
-    });
-  }, [navigation, onSave]);
-
-  console.log('rating', rating);
-
   return (
-    <Screen>
-      <View style={{ flexDirection: 'row' }}>
-        <Text>Comment</Text>
-        <TextInput value={comment} onChangeText={setComment} style={{ borderBottomWidth: 1, flex: 1, marginHorizontal: 10 }} autoCapitalize="none" />
-      </View>
-      <View style={{ flexDirection: 'row' }}>
-        <Text>Rating</Text>
-        <Rating
-          fractions={2}
-          startingValue={rating}
-          imageSize={25}
-          onFinishRating={setRating}
-          tintColor={COLORS.backgroudColor}
+    <Screen
+      style={styles.container}
+      innerStyle={styles.innerContainer}
+      scroll={false}>
+      <View style={styles.centerContainer}>
+        <View style={styles.ratingContainer}>
+          <Text>Rating</Text>
+          <Rating
+            fractions={2}
+            startingValue={rating}
+            imageSize={25}
+            onFinishRating={setRating}
+            tintColor={COLORS.backgroudColor}
+          />
+        </View>
+        <Field
+          label="Comment"
+          value={comment}
+          onChangeText={setComment}
+          style={styles.marginTop}
         />
+        {editingReview && (
+          <Field
+            label="Answer"
+            value={comment}
+            onChangeText={setComment}
+            style={styles.marginTop}
+          />
+        )}
+        <Button title="Save" onPress={onSave} style={styles.marginTop} />
       </View>
     </Screen>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: COLORS.primaryColor,
+  },
+  innerContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  centerContainer: {
+    borderRadius: 10,
+    padding: 12,
+    width: getScreenWidthProportion(0.8),
+    height: getScreenHeightProportion(0.45),
+    backgroundColor: '#D2D2D2',
+  },
+  ratingContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  marginTop: {
+    marginTop: 10,
+  },
+});
 
 export default React.memo(NewReview);

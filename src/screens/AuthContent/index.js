@@ -26,13 +26,19 @@ const AuthContent = ({
       innerStyle={styles.innerContainer}
       scroll={false}>
       <View style={styles.loginBox}>
-        <Field label="Email" value={email} onChangeText={setEmail} />
+        <Field
+          label="Email"
+          value={email}
+          onChangeText={setEmail}
+          autoCapitalize="none"
+        />
         <Field
           label="Password"
           value={password}
           onChangeText={setPassword}
           style={styles.margin}
           secureTextEntry
+          autoCapitalize="none"
         />
         <Button
           disabled={loading}

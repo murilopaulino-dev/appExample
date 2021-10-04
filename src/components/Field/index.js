@@ -5,11 +5,7 @@ const Field = ({ style, inputStyle, label, ...props }) => {
   return (
     <View style={style}>
       <Text>{label}</Text>
-      <TextInput
-        style={[styles.input, inputStyle]}
-        autoCapitalize="none"
-        {...props}
-      />
+      <TextInput style={[styles.input, inputStyle]} {...props} />
     </View>
   );
 };
