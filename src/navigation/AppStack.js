@@ -15,7 +15,7 @@ const Stack = createNativeStackNavigator();
 
 const AppStack = () => (
   <Stack.Navigator>
-    {/* <Stack.Screen name={routes.USER_SELECTOR} component={UserSelector} options={{ title: 'User Selector' }} /> */}
+    <Stack.Screen name={routes.USER_SELECTOR} component={UserSelector} options={{ title: 'User Selector' }} />
     <Stack.Screen
       name={routes.HOME}
       component={Home}

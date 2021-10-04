@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { ActivityIndicator, Button, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, Text, TextInput, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import { COLORS } from '../../constants';
 import ReviewService from '../../services/ReviewService';
 import { checkIfUserRestaurantOwner } from '../../utils/user';
 import { Rating } from 'react-native-ratings';
 import { getScreenHeightProportion } from '../../utils/screen';
+import Button from '../Button';
 
 const LabelValue = ({ label, value, ...valueProps }) => (
   <View style={{ flexDirection: 'row', padding: 3 }}>
@@ -35,7 +36,12 @@ const Review = ({ restaurant, review, isOwner }) => {
   return (
     <View style={{ marginTop: 15, padding: 5, borderWidth: 2, borderRadius: 5, borderColor: COLORS.primaryColor, marginHorizontal: 5, backgroundColor: COLORS.secondaryColor }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-        <LabelValue label="Reviewed by" value={user} style={{width: getScreenHeightProportion(0.45)}} numberOfLines={1} />
+        <LabelValue
+          label="Reviewed by"
+          value={user}
+          style={{ width: getScreenHeightProportion(0.45) }}
+          numberOfLines={1}
+        />
         <Rating
           fractions={2}
           startingValue={rating}
@@ -47,9 +53,14 @@ const Review = ({ restaurant, review, isOwner }) => {
       <LabelValue label="Comment" value={comment} />
       {isAnswered && <LabelValue label="Answer" value={answer} />}
       {userIsOwner && !isAnswered && (
-        <View style={{ flexDirection: 'row' }}>
-          <Text style={{ padding: 3 }}>Answer</Text>
-          <TextInput value={answerField} onChangeText={setAnswerField} style={{ borderBottomWidth: 1, flex: 1, marginHorizontal: 10 }} autoCapitalize="none" />
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Text style={{ padding: 3, fontWeight: 'bold' }}>Answer</Text>
+          <TextInput
+            value={answerField}
+            onChangeText={setAnswerField}
+            style={{ borderBottomWidth: 1, flex: 1, marginHorizontal: 10 }}
+            autoCapitalize="none"
+          />
           {!loading && <Button title="Reply" onPress={replyReview} />}
           {loading && <ActivityIndicator size="small" />}
         </View>

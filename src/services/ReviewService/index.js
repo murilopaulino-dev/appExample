@@ -27,7 +27,10 @@ class ReviewService {
     const restaurantsFilter = [['owner', '==', userId]];
     const userRestaurants = await RestaurantService.getAllRestaurants(restaurantsFilter);
     const restaurantsIds = _.map(userRestaurants, 'id');
-    const reviewsFilter = [['restaurant', 'IN', restaurantsIds]];
+    const reviewsFilter = [
+      ['restaurant', 'IN', restaurantsIds],
+      ['isAnswered', '==', false],
+    ];
     return await FirebaseService.query(END_POINT, reviewsFilter);
   }
 
