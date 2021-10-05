@@ -103,6 +103,7 @@ const Home = ({ navigation }) => {
         refreshing={refreshing}
         onRefresh={fetchData}
         contentContainerStyle={styles.flatListContent}
+        keyExtractor={item => item.id}
       />
     </Screen>
   );

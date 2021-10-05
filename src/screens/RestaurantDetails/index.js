@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, RefreshControl, Text, View } from 'react-native';
+import { RefreshControl, StyleSheet, Text, View } from 'react-native';
 import _ from 'lodash';
 import Screen from '../../components/Screen';
 import routes from '../../navigation/routes';
@@ -96,12 +96,8 @@ const RestaurantDetails = ({ route, navigation }) => {
         <>
           <RestaurantCard
             restaurant={restaurant}
-            style={{
-              backgroundColor: COLORS.secondaryColor,
-              borderRadius: 0,
-              marginBottom: 15,
-            }}
-            nameStyle={{ fontSize: 20 }}
+            style={styles.restaurantCard}
+            nameStyle={styles.restaurantNameCard}
           />
           {checkIfUserIsAdminOrOwner(user, restaurant) && (
             <Button
@@ -114,46 +110,25 @@ const RestaurantDetails = ({ route, navigation }) => {
             !checkIfUserRestaurantOwner(user, restaurant) && (
               <Button title="Write an review!" onPress={openNewReviewPage} />
             )}
-          <View style={{ marginTop: 15 }}>
+          <View style={styles.marginTopReviewsContainer}>
             {highestRatedReview && (
-              <View style={{ marginTop: 10 }}>
-                <View style={{ alignItems: 'center' }}>
-                  <Text
-                    style={{
-                      fontSize: 15,
-                      fontWeight: 'bold',
-                      color: COLORS.primaryColor,
-                    }}>
-                    Highest Rated Review
-                  </Text>
+              <View style={styles.marginTopSection}>
+                <View style={styles.alignItemsCenter}>
+                  <Text style={styles.sectionTitle}>Highest Rated Review</Text>
                 </View>
                 <Review restaurant={restaurant} review={highestRatedReview} />
               </View>
             )}
             {lowestRatedReview && (
-              <View style={{ marginTop: 10 }}>
-                <View style={{ alignItems: 'center' }}>
-                  <Text
-                    style={{
-                      fontSize: 15,
-                      fontWeight: 'bold',
-                      color: COLORS.primaryColor,
-                    }}>
-                    Lowest Rated Review
-                  </Text>
+              <View style={styles.marginTopSection}>
+                <View style={styles.alignItemsCenter}>
+                  <Text style={styles.sectionTitle}>Lowest Rated Review</Text>
                 </View>
                 <Review restaurant={restaurant} review={lowestRatedReview} />
               </View>
             )}
-            <View style={{ alignItems: 'center', marginTop: 10 }}>
-              <Text
-                style={{
-                  fontSize: 15,
-                  fontWeight: 'bold',
-                  color: COLORS.primaryColor,
-                }}>
-                Reviews
-              </Text>
+            <View style={[styles.alignItemsCenter, styles.marginTopSection]}>
+              <Text style={styles.sectionTitle}>Reviews</Text>
             </View>
             {_.map(filteredReviews, (review, index) => (
               <Review
@@ -168,5 +143,30 @@ const RestaurantDetails = ({ route, navigation }) => {
     </Screen>
   );
 };
+
+const styles = StyleSheet.create({
+  restaurantCard: {
+    backgroundColor: COLORS.secondaryColor,
+    borderRadius: 0,
+    marginBottom: 15,
+  },
+  restaurantNameCard: {
+    fontSize: 20,
+  },
+  sectionTitle: {
+    fontSize: 15,
+    fontWeight: 'bold',
+    color: COLORS.primaryColor,
+  },
+  marginTopReviewsContainer: {
+    marginTop: 15,
+  },
+  marginTopSection: {
+    marginTop: 10,
+  },
+  alignItemsCenter: {
+    alignItems: 'center',
+  },
+});
 
 export default React.memo(RestaurantDetails);
