@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, Text, View } from 'react-native';
+import { ActivityIndicator, RefreshControl, Text, View } from 'react-native';
 import _ from 'lodash';
 import Screen from '../../components/Screen';
 import routes from '../../navigation/routes';
@@ -86,8 +86,12 @@ const RestaurantDetails = ({ route, navigation }) => {
   };
 
   return (
-    <Screen style={{ backgroundColor: COLORS.backgroundColor }}>
-      {loading && <ActivityIndicator />}
+    <Screen
+      style={{ backgroundColor: COLORS.backgroundColor }}
+      horizontal={false}
+      refreshControl={
+        <RefreshControl refreshing={loading} onRefresh={fetchRestaurant} />
+      }>
       {!loading && (
         <>
           <RestaurantCard
