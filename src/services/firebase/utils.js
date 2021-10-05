@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { FIRESTORE_URL, ORDER } from '../../constants';
+import { FIRESTORE_END_POINT, ORDER } from '../../constants';
 
 const OPERATORS = {
   '==': 'EQUAL',
@@ -134,7 +134,7 @@ export const createSaveDoc = (doc, endPoint) => ({
   writes: [
     {
       update: {
-        name: `${FIRESTORE_URL}${endPoint}/${doc.id}`,
+        name: `${FIRESTORE_END_POINT}${endPoint}/${doc.id}`,
         ...mountSaveDoc(doc),
       },
     },
@@ -177,7 +177,7 @@ export const createDeleteDoc = (docId, endPoint) => {
   return {
     writes: [
       {
-        delete: `${FIRESTORE_URL}${endPoint}/${docId}`,
+        delete: `${FIRESTORE_END_POINT}${endPoint}/${docId}`,
       },
     ],
   };
