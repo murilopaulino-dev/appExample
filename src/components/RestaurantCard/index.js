@@ -23,7 +23,7 @@ const Restaurant = ({ restaurant, style, nameStyle }) => {
         readonly
         startingValue={averageRating}
         imageSize={25}
-        tintColor={COLORS.backgroudColor}
+        tintColor={style?.backgroundColor || COLORS.backgroundColor}
       />
     </TouchableOpacity>
   );
@@ -31,7 +31,7 @@ const Restaurant = ({ restaurant, style, nameStyle }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.backgroudColor,
+    backgroundColor: COLORS.backgroundColor,
     marginTop: 10,
     borderRadius: 10,
     flexDirection: 'row',

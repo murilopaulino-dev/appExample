@@ -18,5 +18,5 @@ export const ORDER = {
 export const COLORS = {
   primaryColor: '#800080',
   secondaryColor: '#DBD3DB',
-  backgroudColor: '#D2D2D2',
+  backgroundColor: '#D2D2D2',
 };

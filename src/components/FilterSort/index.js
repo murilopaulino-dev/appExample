@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 16,
-    color: '#BEBEBE',
+    color: '#F1F1F1',
     fontWeight: 'bold',
   },
 });

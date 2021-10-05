@@ -92,12 +92,17 @@ const RestaurantDetails = ({ route, navigation }) => {
   };
 
   return (
-    <Screen style={{ backgroundColor: COLORS.backgroudColor }}>
+    <Screen style={{ backgroundColor: COLORS.backgroundColor }}>
       {loading && <ActivityIndicator />}
       {!loading && (
         <>
           <RestaurantCard
             restaurant={restaurant}
+            style={{
+              backgroundColor: COLORS.secondaryColor,
+              borderRadius: 0,
+              marginBottom: 15,
+            }}
             nameStyle={{ fontSize: 20 }}
           />
           {checkIfUserIsAdminOrOwner(user, restaurant) && (

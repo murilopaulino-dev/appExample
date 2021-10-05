@@ -64,7 +64,7 @@ const EditReview = ({ route, navigation }) => {
             startingValue={rating}
             imageSize={25}
             onFinishRating={setRating}
-            tintColor={COLORS.backgroudColor}
+            tintColor={COLORS.backgroundColor}
           />
         </View>
         <Field
