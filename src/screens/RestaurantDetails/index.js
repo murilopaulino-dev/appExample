@@ -1,9 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, Text, View } from 'react-native';
 import _ from 'lodash';
 import Screen from '../../components/Screen';
@@ -11,7 +6,6 @@ import routes from '../../navigation/routes';
 import Review from '../../components/Review';
 import { useSelector } from 'react-redux';
 import {
-  checkIfUserIsAdmin,
   checkIfUserIsAdminOrOwner,
   checkIfUserRestaurantOwner,
 } from '../../utils/user';

@@ -1,4 +1,4 @@
-import React, { useCallback, useLayoutEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import { store } from '../../redux/store';
 import Screen from '../../components/Screen';
@@ -12,6 +12,8 @@ import {
 } from '../../utils/screen';
 import Field from '../../components/Field';
 import Button from '../../components/Button';
+import { useSelector } from 'react-redux';
+import { checkIfUserIsAdmin } from '../../utils/user';
 
 const createNewReview = (comment, rating, restaurantId) => {
   const user = store.getState().user;
@@ -39,17 +41,31 @@ const EditReview = ({ route, navigation }) => {
   const [comment, setComment] = useState(review?.comment || '');
   const [answer, setAnswer] = useState(review?.answer || '');
   const [rating, setRating] = useState(review?.rating || 3);
+  const user = useSelector(state => state.user);
   const editingReview = !!review;
 
   const onSave = useCallback(async () => {
-    await ReviewService.saveReview(
-      editingReview
-        ? getEditingReview(review, comment, answer, rating)
-        : createNewReview(comment, rating, restaurant.id),
-      restaurant,
-    );
-    navigation.goBack();
+    try {
+      await ReviewService.saveReview(
+        editingReview
+          ? getEditingReview(review, comment, answer, rating)
+          : createNewReview(comment, rating, restaurant.id),
+        restaurant,
+      );
+      navigation.goBack();
+    } catch (error) {
+      console.log('error', error);
+    }
   }, [editingReview, review, comment, answer, rating, restaurant, navigation]);
+
+  const onDelete = async () => {
+    try {
+      await ReviewService.deleteReview(review.id);
+      navigation.goBack();
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
 
   return (
     <Screen
@@ -82,6 +98,9 @@ const EditReview = ({ route, navigation }) => {
           />
         )}
         <Button title="Save" onPress={onSave} style={styles.marginTop} />
+        {editingReview && checkIfUserIsAdmin(user) && (
+          <Button title="Delete" onPress={onDelete} style={styles.marginTop} />
+        )}
       </View>
     </Screen>
   );
@@ -99,7 +118,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 12,
     width: getScreenWidthProportion(0.8),
-    height: getScreenHeightProportion(0.45),
+    height: getScreenHeightProportion(0.55),
     backgroundColor: '#D2D2D2',
   },
   ratingContainer: {

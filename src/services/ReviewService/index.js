@@ -25,7 +25,9 @@ class ReviewService {
 
   static async getReviewsPendingReply(userId) {
     const restaurantsFilter = [['owner', '==', userId]];
-    const userRestaurants = await RestaurantService.getAllRestaurants(restaurantsFilter);
+    const userRestaurants = await RestaurantService.getAllRestaurants(
+      restaurantsFilter,
+    );
     const restaurantsIds = _.map(userRestaurants, 'id');
     const reviewsFilter = [
       ['restaurant', 'IN', restaurantsIds],
