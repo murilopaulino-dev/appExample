@@ -4,6 +4,7 @@ import _ from 'lodash';
 import Screen from '../../components/Screen';
 import { ROLES } from '../../constants';
 import UserService from '../../services/UserService';
+import errorHandler from '../../utils/errorHandler';
 
 const UserDetails = ({ route, navigation }) => {
   const userId = route.params;
@@ -21,7 +22,7 @@ const UserDetails = ({ route, navigation }) => {
       const response = await UserService.getUser(userId);
       setUser(response);
     } catch (error) {
-      console.log('error', error);
+      errorHandler(error?.response?.data?.error);
     }
     setLoading(false);
   }, [userId]);
@@ -33,7 +34,7 @@ const UserDetails = ({ route, navigation }) => {
       await UserService.saveUser(user);
       fetchUser();
     } catch (error) {
-      console.log('error', error);
+      errorHandler(error?.response?.data?.error);
     }
     setSavingUser(false);
   };
@@ -44,7 +45,7 @@ const UserDetails = ({ route, navigation }) => {
       await UserService.deleteUser(user.idToken);
       navigation.goBack();
     } catch (error) {
-      console.log('error', error);
+      errorHandler(error?.response?.data?.error);
     }
     setSavingUser(false);
   };

@@ -15,6 +15,7 @@ import ReviewService from '../../services/ReviewService';
 import { COLORS } from '../../constants';
 import RestaurantCard from '../../components/RestaurantCard';
 import Button from '../../components/Button';
+import errorHandler from '../../utils/errorHandler';
 
 const removeFromReviews = (reviews = [], reviewToRemoveId) => {
   if (!reviews.length || !reviewToRemoveId) return;
@@ -51,7 +52,7 @@ const RestaurantDetails = ({ route, navigation }) => {
       setRestaurant(restaurantResponse);
       setReviews(reviewsResponse);
     } catch (error) {
-      console.log('error', error);
+      errorHandler(error?.response?.data?.error);
     }
     setLoading(false);
   }, [restaurantId]);

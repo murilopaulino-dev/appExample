@@ -5,6 +5,7 @@ import Screen from '../../components/Screen';
 import UserService from '../../services/UserService';
 import UserCard from '../../components/UserCard';
 import { useFocusEffect } from '@react-navigation/core';
+import errorHandler from '../../utils/errorHandler';
 
 const UsersList = ({ navigation }) => {
   const [users, setUsers] = useState([]);
@@ -16,7 +17,7 @@ const UsersList = ({ navigation }) => {
       const response = await UserService.getUsers();
       setUsers(response);
     } catch (error) {
-      console.log('error', error);
+      errorHandler(error?.response?.data?.error);
     }
     setLoading(false);
   }, []);

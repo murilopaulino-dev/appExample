@@ -4,6 +4,7 @@ import { setUser } from '../../redux/actions/user';
 import AuthUserService from '../../services/AuthUserService';
 import routes from '../../navigation/routes';
 import AuthContent from '../AuthContent';
+import errorHandler from '../../utils/errorHandler';
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState();
@@ -17,7 +18,7 @@ const Login = ({ navigation }) => {
       const response = await AuthUserService.login({ email, password });
       dispatch(setUser(response));
     } catch (error) {
-      console.log('error', error.message, error.status, error.code);
+      errorHandler(error?.response?.data?.error);
     }
     setLoading(false);
   };

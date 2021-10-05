@@ -15,6 +15,7 @@ import {
   userCanCreateRestaurants,
 } from '../../utils/user';
 import { getScreenHeightProportion } from '../../utils/screen';
+import errorHandler from '../../utils/errorHandler';
 
 const Home = ({ navigation }) => {
   const [restaurants, setRestaurants] = useState([]);
@@ -45,7 +46,7 @@ const Home = ({ navigation }) => {
         );
         setRestaurants(response);
       } catch (error) {
-        console.log('error', error);
+        errorHandler(error?.response?.data?.error);
       }
       setRefreshing(false);
     },

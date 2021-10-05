@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import AuthUserService from '../../services/AuthUserService';
+import errorHandler from '../../utils/errorHandler';
 import AuthContent from '../AuthContent';
 
 const Signup = ({ navigation }) => {
@@ -13,7 +14,7 @@ const Signup = ({ navigation }) => {
       await AuthUserService.signUp({ email, password });
       navigation.goBack();
     } catch (error) {
-      console.log('error', error.message, error.status, error.code);
+      errorHandler(error?.response?.data?.error);
     }
     setLoading(true);
   };

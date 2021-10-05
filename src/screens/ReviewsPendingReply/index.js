@@ -6,6 +6,7 @@ import Review from '../../components/Review';
 import Screen from '../../components/Screen';
 import ReviewService from '../../services/ReviewService';
 import { COLORS } from '../../constants';
+import errorHandler from '../../utils/errorHandler';
 
 const ReviewsPendingReply = () => {
   const [reviews, setReviews] = useState([]);
@@ -18,7 +19,7 @@ const ReviewsPendingReply = () => {
       const response = await ReviewService.getReviewsPendingReply(user.id);
       setReviews(response);
     } catch (error) {
-      console.log('error', error);
+      errorHandler(error?.response?.data?.error);
     }
     setLoading(false);
   }, [user]);

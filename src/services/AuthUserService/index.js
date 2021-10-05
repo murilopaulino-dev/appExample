@@ -1,4 +1,4 @@
-import axios from 'axios';
+import refreshApi from 'axios';
 import { API_KEY, ROLES, TOKEN_URL } from '../../constants';
 import Firebase from '../firebase';
 import authApi from '../axios/user';
@@ -64,19 +64,15 @@ class AuthUserService {
   }
 
   static async refreshToken(refreshToken) {
-    try {
-      const refreshData = {
-        grant_type: 'refresh_token',
-        refresh_token: refreshToken,
-      };
-      const response = await axios.post(
-        `${TOKEN_URL}${REFRESH_TOKEN_END_POINT}`,
-        refreshData,
-      );
-      return response?.data;
-    } catch (error) {
-      console.log('error', error);
-    }
+    const refreshData = {
+      grant_type: 'refresh_token',
+      refresh_token: refreshToken,
+    };
+    const response = await refreshApi.post(
+      `${TOKEN_URL}${REFRESH_TOKEN_END_POINT}`,
+      refreshData,
+    );
+    return response?.data;
   }
 }
 

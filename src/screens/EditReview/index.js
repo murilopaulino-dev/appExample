@@ -14,6 +14,7 @@ import Field from '../../components/Field';
 import Button from '../../components/Button';
 import { useSelector } from 'react-redux';
 import { checkIfUserIsAdmin } from '../../utils/user';
+import errorHandler from '../../utils/errorHandler';
 
 const createNewReview = (comment, rating, restaurantId) => {
   const user = store.getState().user;
@@ -54,7 +55,7 @@ const EditReview = ({ route, navigation }) => {
       );
       navigation.goBack();
     } catch (error) {
-      console.log('error', error);
+      errorHandler(error?.response?.data?.error);
     }
   }, [editingReview, review, comment, answer, rating, restaurant, navigation]);
 
@@ -63,7 +64,7 @@ const EditReview = ({ route, navigation }) => {
       await ReviewService.deleteReview(review.id);
       navigation.goBack();
     } catch (error) {
-      console.log('error', error);
+      errorHandler(error?.response?.data?.error);
     }
   };
 

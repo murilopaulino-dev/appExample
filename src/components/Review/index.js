@@ -20,6 +20,7 @@ import { getScreenHeightProportion } from '../../utils/screen';
 import Button from '../Button';
 import routes from '../../navigation/routes';
 import LabelValue from '../LabelValue';
+import errorHandler from '../../utils/errorHandler';
 
 const Review = ({ restaurant, review, isOwner }) => {
   const {
@@ -46,7 +47,7 @@ const Review = ({ restaurant, review, isOwner }) => {
       review.answer = answerField;
       await ReviewService.replyReview(review);
     } catch (error) {
-      console.log('error', error);
+      errorHandler(error?.response?.data?.error);
     }
     setLoading(false);
   };

@@ -13,6 +13,7 @@ import {
 } from '../../utils/screen';
 import Field from '../../components/Field';
 import Button from '../../components/Button';
+import errorHandler from '../../utils/errorHandler';
 
 const EditRestaurant = ({ route, navigation }) => {
   const editingRestaurant = route.params;
@@ -34,7 +35,7 @@ const EditRestaurant = ({ route, navigation }) => {
       await RestaurantService.saveRestaurant(restaurantDoc);
       navigation.navigate(routes.HOME);
     } catch (error) {
-      console.log('error', error);
+      errorHandler(error?.response?.data?.error);
     }
   };
 
@@ -43,7 +44,7 @@ const EditRestaurant = ({ route, navigation }) => {
       await RestaurantService.deleteRestaurant(editingRestaurant.id);
       navigation.navigate(routes.HOME);
     } catch (error) {
-      console.log('error', error);
+      errorHandler(error?.response?.data?.error);
     }
   };
 
