@@ -26,7 +26,16 @@ class AuthUserService {
     loginData.returnSecureToken = true;
     const userAuth = await FirebaseAuthService.post(LOGIN_END_POINT, loginData);
     if (userAuth) {
-      const user = await FirebaseFirestoreService.get(`${USER_END_POINT}/${userAuth.localId}`);
+      const idToken = userAuth.idToken;
+      const options = {
+        headers: {
+          Authorization: `Bearer ${idToken}`,
+        },
+      };
+      const user = await FirebaseFirestoreService.get(
+        `${USER_END_POINT}/${userAuth.localId}`,
+        options,
+      );
       const expiresAt = calcExpirationTime(user.expiresIn);
       return { ...user, ...userAuth, expiresAt };
     }
@@ -34,7 +43,10 @@ class AuthUserService {
 
   static async signUp(signUpData = {}) {
     signUpData.returnSecureToken = true;
-    const userAuth = await FirebaseAuthService.post(SIGNUP_END_POINT, signUpData);
+    const userAuth = await FirebaseAuthService.post(
+      SIGNUP_END_POINT,
+      signUpData,
+    );
     if (userAuth) {
       const user = {
         id: userAuth.localId,

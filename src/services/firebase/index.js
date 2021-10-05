@@ -14,8 +14,8 @@ class Firebase {
     this.api = api;
   }
 
-  async get(endPoint) {
-    const response = await this.api.get(endPoint);
+  async get(endPoint, config) {
+    const response = await this.api.get(endPoint, config);
     if (response.status !== 200) {
       return {
         status: response.status,
@@ -30,19 +30,19 @@ class Firebase {
     return response.data;
   }
 
-  async post(endPoint, data) {
-    const response = await this.api.post(endPoint, data);
+  async post(endPoint, data, config) {
+    const response = await this.api.post(endPoint, data, config);
     return response.data;
   }
 
-  async save(endPoint, data) {
+  async save(endPoint, data, config) {
     const saveDocOptions = createSaveDoc(data, endPoint);
-    return this.api.post(COMMIT_DOC_END_POINT, saveDocOptions);
+    return this.api.post(COMMIT_DOC_END_POINT, saveDocOptions, config);
   }
 
-  async query(endPoint, filter, sort) {
+  async query(endPoint, filter, sort, config) {
     const queryOptions = createQuery(endPoint, filter, sort);
-    const response = await this.api.post(QUERY_END_POINT, queryOptions);
+    const response = await this.api.post(QUERY_END_POINT, queryOptions, config);
     const documents = [];
     response.data.forEach(doc => {
       if (doc.document) {
@@ -52,8 +52,8 @@ class Firebase {
     return documents;
   }
 
-  async deleteDoc(endPoint, docId) {
-    const deleteDocOption = createDeleteDoc(docId, endPoint);
+  async deleteDoc(endPoint, docId, config) {
+    const deleteDocOption = createDeleteDoc(docId, endPoint, config);
     return this.api.post(COMMIT_DOC_END_POINT, deleteDocOption);
   }
 }
