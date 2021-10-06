@@ -53,7 +53,6 @@ class AuthUserService {
         email: userAuth.email,
         name: signUpData.name,
         role: ROLES.NORMAL,
-        idToken: userAuth.idToken,
       };
       await FirebaseFirestoreService.save(USER_END_POINT, user);
       return { ...user, ...userAuth };
