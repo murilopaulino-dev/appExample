@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { RefreshControl, StyleSheet, Text, View } from 'react-native';
-import _ from 'lodash';
+import _, { filter } from 'lodash';
 import Screen from '../../components/Screen';
 import routes from '../../navigation/routes';
 import Review from '../../components/Review';
@@ -130,6 +130,13 @@ const RestaurantDetails = ({ route, navigation }) => {
             <View style={[styles.alignItemsCenter, styles.marginTopSection]}>
               <Text style={styles.sectionTitle}>Reviews</Text>
             </View>
+            {!filteredReviews.length && (
+              <View style={styles.emptyReviewsContainer}>
+                <Text style={styles.emptyReviewsText}>
+                  This restaurant has no reviews
+                </Text>
+              </View>
+            )}
             {_.map(filteredReviews, (review, index) => (
               <Review
                 key={`review-${index}`}
@@ -166,6 +173,13 @@ const styles = StyleSheet.create({
   },
   alignItemsCenter: {
     alignItems: 'center',
+  },
+  emptyReviewsContainer: {
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  emptyReviewsText: {
+    color: '#555',
   },
 });
 

@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 12,
     width: getScreenWidthProportion(0.8),
-    height: getScreenHeightProportion(0.8),
+    height: getScreenHeightProportion(0.75),
     backgroundColor: '#D2D2D2',
   },
   imageContainer: {

@@ -1,7 +1,8 @@
 import { useFocusEffect } from '@react-navigation/core';
 import React, { useCallback, useState } from 'react';
-import { Button, FlatList, StyleSheet, View } from 'react-native';
+import { FlatList, StyleSheet } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import Button from '../../components/Button';
 import FilterSort from '../../components/FilterSort';
 import RestaurantCard from '../../components/RestaurantCard';
 import Screen from '../../components/Screen';
@@ -85,17 +86,26 @@ const Home = ({ navigation }) => {
         loading={refreshing}
       />
       {userCanCreateRestaurants(user) && (
-        <Button title="New Restaurant" onPress={openNewRestaurantPage} />
+        <Button
+          title="New Restaurant"
+          onPress={openNewRestaurantPage}
+          titleStyle={styles.button}
+        />
       )}
-      <Button title="Logout" onPress={onLogout} />
+      <Button title="Logout" onPress={onLogout} titleStyle={styles.button} />
       {checkIfUserRoleIsOwner(user) && (
         <Button
           title="Reviews Pending Reply"
           onPress={onOpenPendingReplyScreen}
+          titleStyle={styles.button}
         />
       )}
       {checkIfUserIsAdmin(user) && (
-        <Button title="Manage Users" onPress={onOpenUsersListScreen} />
+        <Button
+          title="Manage Users"
+          onPress={onOpenUsersListScreen}
+          titleStyle={styles.button}
+        />
       )}
       <FlatList
         style={styles.flatList}
@@ -119,6 +129,10 @@ const styles = StyleSheet.create({
   },
   flatListContent: {
     padding: 10,
+  },
+  button: {
+    color: '#DDD',
+    fontWeight: 'bold',
   },
 });
 
