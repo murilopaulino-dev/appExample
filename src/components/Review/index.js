@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -20,6 +20,7 @@ import Button from '../Button';
 import routes from '../../navigation/routes';
 import LabelValue from '../LabelValue';
 import errorHandler from '../../utils/errorHandler';
+import UserService from '../../services/UserService';
 
 const Review = ({ restaurant, review, isOwner }) => {
   const {
@@ -30,18 +31,33 @@ const Review = ({ restaurant, review, isOwner }) => {
     isAnswered,
   } = review || {};
   const [answerField, setAnswerField] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [userName, setUserName] = useState('');
   const restaurantUser = useSelector(state => state.user);
   const navigation = useNavigation();
-  const user = useSelector(state => state.user);
-  const userIsAdmin = checkIfUserIsAdmin(user);
+  const userIsAdmin = checkIfUserIsAdmin(restaurantUser);
   const userIsOwnerOrAdmin =
     isOwner ||
     userIsAdmin ||
     checkIfUserRestaurantOwner(restaurantUser, restaurant);
 
+  useEffect(() => {
+    fetchUser();
+  }, [fetchUser]);
+
+  const fetchUser = useCallback(async () => {
+    let responseUserName = userReview;
+    try {
+      const response = await UserService.getUser(userReview);
+      if (response?.name) responseUserName = response.name;
+    } catch (error) {
+      console.log('error', error);
+    }
+    setUserName(responseUserName);
+  }, [userReview]);
+
   const replyReview = async () => {
-    setLoading(true);
+    setSaving(true);
     try {
       if (!answerField) throw new Error(ERROR_CODES.INSERT_REPLY);
       review.answer = answerField;
@@ -49,7 +65,7 @@ const Review = ({ restaurant, review, isOwner }) => {
     } catch (error) {
       errorHandler(error);
     }
-    setLoading(false);
+    setSaving(false);
   };
 
   const onOpenEditReviewPage = () => {
@@ -64,7 +80,7 @@ const Review = ({ restaurant, review, isOwner }) => {
       <View style={styles.header}>
         <LabelValue
           label="Reviewed by"
-          value={userReview}
+          value={userName}
           style={{ width: getScreenHeightProportion(0.45) }}
           numberOfLines={1}
         />
@@ -87,7 +103,7 @@ const Review = ({ restaurant, review, isOwner }) => {
             onChangeText={setAnswerField}
             style={styles.answerInput}
           />
-          <Button title="Reply" onPress={replyReview} loading={loading} />
+          <Button title="Reply" onPress={replyReview} loading={saving} />
         </View>
       )}
     </TouchableOpacity>

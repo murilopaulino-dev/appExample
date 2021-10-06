@@ -7,6 +7,7 @@ import AuthContent from '../AuthContent';
 const Signup = ({ navigation }) => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+  const [name, setName] = useState();
   const [loading, setLoading] = useState();
 
   const onSingUp = async () => {
@@ -14,7 +15,7 @@ const Signup = ({ navigation }) => {
     try {
       if (!email) throw new Error(ERROR_CODES.EMPTY_EMAIL);
       if (!password) throw new Error(ERROR_CODES.EMPTY_PASSWORD);
-      await AuthUserService.signUp({ email, password });
+      await AuthUserService.signUp({ email, password, name });
       navigation.goBack();
     } catch (error) {
       errorHandler(error);
@@ -28,6 +29,8 @@ const Signup = ({ navigation }) => {
       setEmail={setEmail}
       password={password}
       setPassword={setPassword}
+      name={name}
+      setName={setName}
       onSubmit={onSingUp}
       submitText="Sign Up"
       loading={loading}

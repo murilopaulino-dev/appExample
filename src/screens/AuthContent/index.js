@@ -16,6 +16,8 @@ const AuthContent = ({
   onSubmit,
   email,
   setEmail,
+  name,
+  setName,
   password,
   setPassword,
   goToSignUpScreen,
@@ -36,6 +38,14 @@ const AuthContent = ({
           onChangeText={setEmail}
           autoCapitalize="none"
         />
+        {!isLogin && (
+          <Field
+            label="Name"
+            value={name}
+            onChangeText={setName}
+            style={styles.margin}
+          />
+        )}
         <Field
           label="Password"
           value={password}

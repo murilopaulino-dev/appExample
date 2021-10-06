@@ -55,6 +55,7 @@ const UserDetails = ({ route, navigation }) => {
 
   return (
     <Screen>
+      <Text>{user.name}</Text>
       <Text>{user.email}</Text>
       <Text>{user.role}</Text>
       <View style={{ flexDirection: 'row' }}>

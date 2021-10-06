@@ -11,7 +11,7 @@ const UserCard = ({ user }) => {
 
   return (
     <TouchableOpacity style={{ marginTop: 10 }} onPress={onOpenUser}>
-      <Text>{user.email} - {user.role}</Text>
+      <Text>{user.name} - {user.email} - {user.role}</Text>
     </TouchableOpacity>
   );
 };

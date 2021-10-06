@@ -51,6 +51,7 @@ class AuthUserService {
       const user = {
         id: userAuth.localId,
         email: userAuth.email,
+        name: signUpData.name,
         role: ROLES.NORMAL,
         idToken: userAuth.idToken,
       };
