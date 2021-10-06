@@ -9,7 +9,7 @@ export const successToast = message => {
     animation: true,
     hideOnPress: true,
     opacity: 1,
-    backgroundColor: '#04e995',
+    backgroundColor: '#026c45',
     textColor: '#FFF',
     textStyle: { fontWeight: 'bold' },
   });
