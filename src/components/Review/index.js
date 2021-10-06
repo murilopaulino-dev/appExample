@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-  ActivityIndicator,
   StyleSheet,
   Text,
   TextInput,
@@ -87,8 +86,7 @@ const Review = ({ restaurant, review, isOwner }) => {
             onChangeText={setAnswerField}
             style={styles.answerInput}
           />
-          {!loading && <Button title="Reply" onPress={replyReview} />}
-          {loading && <ActivityIndicator size="small" />}
+          <Button title="Reply" onPress={replyReview} loading={loading} />
         </View>
       )}
     </TouchableOpacity>

@@ -18,10 +18,12 @@ import errorHandler from '../../utils/errorHandler';
 const EditRestaurant = ({ route, navigation }) => {
   const editingRestaurant = route.params;
   const [name, setName] = useState(editingRestaurant?.name ?? '');
+  const [loading, setLoading] = useState(false);
   const user = useSelector(state => state.user);
   const userIsAdmin = checkIfUserIsAdmin(user);
 
   const onSave = async () => {
+    setLoading(true);
     try {
       const restaurantDoc = {
         ...(editingRestaurant || {}),
@@ -37,6 +39,7 @@ const EditRestaurant = ({ route, navigation }) => {
     } catch (error) {
       errorHandler(error?.response?.data?.error);
     }
+    setLoading(false);
   };
 
   const onDelete = async () => {
@@ -61,9 +64,9 @@ const EditRestaurant = ({ route, navigation }) => {
         )}
         <Field label="Name" value={name} onChangeText={setName} />
         {userIsAdmin && !!editingRestaurant && (
-          <Button title="Delete" onPress={onDelete} style={styles.marginTop} />
+          <Button title="Delete" onPress={onDelete} style={styles.marginTop} loading={loading} />
         )}
-        <Button title="Save" onPress={onSave} style={styles.marginTop} />
+        <Button title="Save" onPress={onSave} style={styles.marginTop} loading={loading} />
       </View>
     </Screen>
   );

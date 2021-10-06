@@ -42,10 +42,12 @@ const EditReview = ({ route, navigation }) => {
   const [comment, setComment] = useState(review?.comment || '');
   const [answer, setAnswer] = useState(review?.answer || '');
   const [rating, setRating] = useState(review?.rating || 3);
+  const [loading, setLoading] = useState(false);
   const user = useSelector(state => state.user);
   const editingReview = !!review;
 
   const onSave = useCallback(async () => {
+    setLoading(true);
     try {
       await ReviewService.saveReview(
         editingReview
@@ -57,6 +59,7 @@ const EditReview = ({ route, navigation }) => {
     } catch (error) {
       errorHandler(error?.response?.data?.error);
     }
+    setLoading(false);
   }, [editingReview, review, comment, answer, rating, restaurant, navigation]);
 
   const onDelete = async () => {
@@ -98,9 +101,19 @@ const EditReview = ({ route, navigation }) => {
             style={styles.marginTop}
           />
         )}
-        <Button title="Save" onPress={onSave} style={styles.marginTop} />
+        <Button
+          title="Save"
+          onPress={onSave}
+          style={styles.marginTop}
+          loading={loading}
+        />
         {editingReview && checkIfUserIsAdmin(user) && (
-          <Button title="Delete" onPress={onDelete} style={styles.marginTop} />
+          <Button
+            title="Delete"
+            onPress={onDelete}
+            style={styles.marginTop}
+            loading={loading}
+          />
         )}
       </View>
     </Screen>

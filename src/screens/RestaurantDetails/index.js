@@ -104,7 +104,6 @@ const RestaurantDetails = ({ route, navigation }) => {
             <Button
               title="Edit Restaurant"
               onPress={onOpenEditRestaurantPage}
-              disabled={loading}
             />
           )}
           {!alreadyReviewed &&

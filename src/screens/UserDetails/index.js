@@ -1,10 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, Button, Text, View } from 'react-native';
+import { ActivityIndicator, Text, View } from 'react-native';
 import _ from 'lodash';
 import Screen from '../../components/Screen';
 import { ROLES } from '../../constants';
 import UserService from '../../services/UserService';
 import errorHandler from '../../utils/errorHandler';
+import Button from '../../components/Button';
 
 const UserDetails = ({ route, navigation }) => {
   const userId = route.params;
@@ -58,10 +59,15 @@ const UserDetails = ({ route, navigation }) => {
       <Text>{user.role}</Text>
       <View style={{ flexDirection: 'row' }}>
         {_.map(ROLES, role => (
-          <Button title={role} onPress={() => changeUserRole(role)} disabled={savingUser || role === user.role} />
+          <Button
+            title={role}
+            onPress={() => changeUserRole(role)}
+            loading={savingUser}
+            disabled={role === user.role}
+          />
         ))}
       </View>
-      <Button title="Delete User" disabled={savingUser} onPress={onDeleteUser} />
+      <Button title="Delete User" loading={savingUser} onPress={onDeleteUser} />
     </Screen>
   );
 };

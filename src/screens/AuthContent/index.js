@@ -41,7 +41,7 @@ const AuthContent = ({
           autoCapitalize="none"
         />
         <Button
-          disabled={loading}
+          loading={loading}
           title={submitText}
           onPress={onSubmit}
           style={styles.margin}
@@ -49,6 +49,7 @@ const AuthContent = ({
         {isLogin && (
           <Button
             title="Sign Up"
+            loading={loading}
             onPress={goToSignUpScreen}
             style={styles.margin}
           />
