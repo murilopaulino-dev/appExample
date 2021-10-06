@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ERROR_CODES } from '../../constants';
 import AuthUserService from '../../services/AuthUserService';
 import errorHandler from '../../utils/errorHandler';
+import { successToast } from '../../utils/toast';
 import AuthContent from '../AuthContent';
 
 const Signup = ({ navigation }) => {
@@ -16,6 +17,7 @@ const Signup = ({ navigation }) => {
       if (!email) throw new Error(ERROR_CODES.EMPTY_EMAIL);
       if (!password) throw new Error(ERROR_CODES.EMPTY_PASSWORD);
       await AuthUserService.signUp({ email, password, name });
+      successToast('User created. Login to access the app.');
       navigation.goBack();
     } catch (error) {
       errorHandler(error);

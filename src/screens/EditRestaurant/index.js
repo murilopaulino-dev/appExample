@@ -14,6 +14,7 @@ import {
 import Field from '../../components/Field';
 import Button from '../../components/Button';
 import errorHandler from '../../utils/errorHandler';
+import { successToast } from '../../utils/toast';
 
 const EditRestaurant = ({ route, navigation }) => {
   const editingRestaurant = route.params;
@@ -36,6 +37,8 @@ const EditRestaurant = ({ route, navigation }) => {
         restaurantDoc.averageRating = 0;
       }
       await RestaurantService.saveRestaurant(restaurantDoc);
+      if (editingRestaurant) successToast('Restaurant edited');
+      else successToast('Restaurant created');
       navigation.navigate(routes.HOME);
     } catch (error) {
       errorHandler(error);
@@ -46,6 +49,7 @@ const EditRestaurant = ({ route, navigation }) => {
   const onDelete = async () => {
     try {
       await RestaurantService.deleteRestaurant(editingRestaurant.id);
+      successToast('Restaurant deleted');
       navigation.navigate(routes.HOME);
     } catch (error) {
       errorHandler(error);

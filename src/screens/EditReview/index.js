@@ -15,6 +15,7 @@ import Button from '../../components/Button';
 import { useSelector } from 'react-redux';
 import { checkIfUserIsAdmin } from '../../utils/user';
 import errorHandler from '../../utils/errorHandler';
+import { successToast } from '../../utils/toast';
 
 const createNewReview = (comment, rating, restaurantId) => {
   const user = store.getState().user;
@@ -56,6 +57,8 @@ const EditReview = ({ route, navigation }) => {
           : createNewReview(comment, rating, restaurant.id),
         restaurant,
       );
+      if (editingReview) successToast('Review edited');
+      else successToast('Thank you for your review!');
       navigation.goBack();
     } catch (error) {
       errorHandler(error);
@@ -66,6 +69,7 @@ const EditReview = ({ route, navigation }) => {
   const onDelete = async () => {
     try {
       await ReviewService.deleteReview(review.id);
+      successToast('Review deleted');
       navigation.goBack();
     } catch (error) {
       errorHandler(error);

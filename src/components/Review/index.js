@@ -21,6 +21,7 @@ import routes from '../../navigation/routes';
 import LabelValue from '../LabelValue';
 import errorHandler from '../../utils/errorHandler';
 import UserService from '../../services/UserService';
+import { successToast } from '../../utils/toast';
 
 const Review = ({ restaurant, review, isOwner }) => {
   const {
@@ -62,6 +63,7 @@ const Review = ({ restaurant, review, isOwner }) => {
       if (!answerField) throw new Error(ERROR_CODES.INSERT_REPLY);
       review.answer = answerField;
       await ReviewService.replyReview(review);
+      successToast('Review replied');
     } catch (error) {
       errorHandler(error);
     }

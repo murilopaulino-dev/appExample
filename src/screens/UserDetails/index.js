@@ -6,6 +6,7 @@ import { ROLES } from '../../constants';
 import UserService from '../../services/UserService';
 import errorHandler from '../../utils/errorHandler';
 import Button from '../../components/Button';
+import { successToast } from '../../utils/toast';
 
 const UserDetails = ({ route, navigation }) => {
   const userId = route.params;
@@ -33,6 +34,7 @@ const UserDetails = ({ route, navigation }) => {
     try {
       user.role = newRole;
       await UserService.saveUser(user);
+      successToast('Changed user role');
       fetchUser();
     } catch (error) {
       errorHandler(error);
