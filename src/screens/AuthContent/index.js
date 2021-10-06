@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 import Screen from '../../components/Screen';
 import {
   getScreenHeightProportion,
@@ -8,6 +8,7 @@ import {
 import Field from '../../components/Field';
 import Button from '../../components/Button';
 import { COLORS } from '../../constants';
+import Logo from '../../assets/images/logo.png';
 
 const AuthContent = ({
   isLogin,
@@ -26,6 +27,9 @@ const AuthContent = ({
       innerStyle={styles.innerContainer}
       scroll={false}>
       <View style={styles.loginBox}>
+        <View style={styles.imageContainer}>
+          <Image source={Logo} />
+        </View>
         <Field
           label="Email"
           value={email}
@@ -71,8 +75,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 12,
     width: getScreenWidthProportion(0.8),
-    height: getScreenHeightProportion(0.45),
+    height: getScreenHeightProportion(0.8),
     backgroundColor: '#D2D2D2',
+  },
+  imageContainer: {
+    alignItems: 'center',
+    marginBottom: 25,
   },
   margin: {
     marginTop: 10,
