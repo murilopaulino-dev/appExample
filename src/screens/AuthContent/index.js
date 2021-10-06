@@ -28,7 +28,7 @@ const AuthContent = ({
       scroll={false}>
       <View style={styles.loginBox}>
         <View style={styles.imageContainer}>
-          <Image source={Logo} />
+          <Image source={Logo} style={styles.image} />
         </View>
         <Field
           label="Email"
@@ -81,6 +81,10 @@ const styles = StyleSheet.create({
   imageContainer: {
     alignItems: 'center',
     marginBottom: 25,
+  },
+  image: {
+    width: 80,
+    height: 80,
   },
   margin: {
     marginTop: 10,
