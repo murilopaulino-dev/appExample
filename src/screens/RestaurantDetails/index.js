@@ -52,7 +52,7 @@ const RestaurantDetails = ({ route, navigation }) => {
       setRestaurant(restaurantResponse);
       setReviews(reviewsResponse);
     } catch (error) {
-      errorHandler(error?.response?.data?.error);
+      errorHandler(error);
     }
     setLoading(false);
   }, [restaurantId]);

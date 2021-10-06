@@ -53,7 +53,6 @@ const AuthContent = ({
         {isLogin && (
           <Button
             title="Sign Up"
-            loading={loading}
             onPress={goToSignUpScreen}
             style={styles.margin}
           />

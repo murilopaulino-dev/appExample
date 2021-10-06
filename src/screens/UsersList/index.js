@@ -17,7 +17,7 @@ const UsersList = ({ navigation }) => {
       const response = await UserService.getUsers();
       setUsers(response);
     } catch (error) {
-      errorHandler(error?.response?.data?.error);
+      errorHandler(error);
     }
     setLoading(false);
   }, []);

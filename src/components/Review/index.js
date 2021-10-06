@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/core';
-import { COLORS } from '../../constants';
+import { COLORS, ERROR_CODES } from '../../constants';
 import ReviewService from '../../services/ReviewService';
 import {
   checkIfUserIsAdmin,
@@ -43,10 +43,11 @@ const Review = ({ restaurant, review, isOwner }) => {
   const replyReview = async () => {
     setLoading(true);
     try {
+      if (!answerField) throw new Error(ERROR_CODES.INSERT_REPLY);
       review.answer = answerField;
       await ReviewService.replyReview(review);
     } catch (error) {
-      errorHandler(error?.response?.data?.error);
+      errorHandler(error);
     }
     setLoading(false);
   };

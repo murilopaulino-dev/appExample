@@ -5,7 +5,7 @@ import Screen from '../../components/Screen';
 import { generateNewId } from '../../utils';
 import ReviewService from '../../services/ReviewService';
 import { Rating } from 'react-native-ratings';
-import { COLORS } from '../../constants';
+import { COLORS, ERROR_CODES } from '../../constants';
 import {
   getScreenHeightProportion,
   getScreenWidthProportion,
@@ -49,6 +49,7 @@ const EditReview = ({ route, navigation }) => {
   const onSave = useCallback(async () => {
     setLoading(true);
     try {
+      if (!comment) throw new Error(ERROR_CODES.INSERT_COMMENT);
       await ReviewService.saveReview(
         editingReview
           ? getEditingReview(review, comment, answer, rating)
@@ -57,7 +58,7 @@ const EditReview = ({ route, navigation }) => {
       );
       navigation.goBack();
     } catch (error) {
-      errorHandler(error?.response?.data?.error);
+      errorHandler(error);
     }
     setLoading(false);
   }, [editingReview, review, comment, answer, rating, restaurant, navigation]);
@@ -67,7 +68,7 @@ const EditReview = ({ route, navigation }) => {
       await ReviewService.deleteReview(review.id);
       navigation.goBack();
     } catch (error) {
-      errorHandler(error?.response?.data?.error);
+      errorHandler(error);
     }
   };
 

@@ -5,6 +5,7 @@ import AuthUserService from '../../services/AuthUserService';
 import routes from '../../navigation/routes';
 import AuthContent from '../AuthContent';
 import errorHandler from '../../utils/errorHandler';
+import { ERROR_CODES } from '../../constants';
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState();
@@ -15,10 +16,12 @@ const Login = ({ navigation }) => {
   const onLogin = async () => {
     setLoading(true);
     try {
+      if (!email) throw new Error(ERROR_CODES.EMPTY_EMAIL);
+      if (!password) throw new Error(ERROR_CODES.EMPTY_PASSWORD);
       const response = await AuthUserService.login({ email, password });
       dispatch(setUser(response));
     } catch (error) {
-      errorHandler(error?.response?.data?.error);
+      errorHandler(error);
     }
     setLoading(false);
   };

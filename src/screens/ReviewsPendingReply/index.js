@@ -19,7 +19,7 @@ const ReviewsPendingReply = () => {
       const response = await ReviewService.getReviewsPendingReply(user.id);
       setReviews(response);
     } catch (error) {
-      errorHandler(error?.response?.data?.error);
+      errorHandler(error);
     }
     setLoading(false);
   }, [user]);

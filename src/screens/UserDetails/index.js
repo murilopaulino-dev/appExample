@@ -23,7 +23,7 @@ const UserDetails = ({ route, navigation }) => {
       const response = await UserService.getUser(userId);
       setUser(response);
     } catch (error) {
-      errorHandler(error?.response?.data?.error);
+      errorHandler(error);
     }
     setLoading(false);
   }, [userId]);
@@ -35,7 +35,7 @@ const UserDetails = ({ route, navigation }) => {
       await UserService.saveUser(user);
       fetchUser();
     } catch (error) {
-      errorHandler(error?.response?.data?.error);
+      errorHandler(error);
     }
     setSavingUser(false);
   };
@@ -46,7 +46,7 @@ const UserDetails = ({ route, navigation }) => {
       await UserService.deleteUser(user.idToken);
       navigation.goBack();
     } catch (error) {
-      errorHandler(error?.response?.data?.error);
+      errorHandler(error);
     }
     setSavingUser(false);
   };

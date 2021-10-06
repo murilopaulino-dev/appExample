@@ -47,7 +47,7 @@ const Home = ({ navigation }) => {
         );
         setRestaurants(response);
       } catch (error) {
-        errorHandler(error?.response?.data?.error);
+        errorHandler(error);
       }
       setRefreshing(false);
     },

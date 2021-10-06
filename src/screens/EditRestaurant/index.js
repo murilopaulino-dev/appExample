@@ -6,7 +6,7 @@ import RestaurantService from '../../services/RestaurantService';
 import routes from '../../navigation/routes';
 import { checkIfUserIsAdmin } from '../../utils/user';
 import { generateNewId } from '../../utils';
-import { COLORS } from '../../constants';
+import { COLORS, ERROR_CODES } from '../../constants';
 import {
   getScreenHeightProportion,
   getScreenWidthProportion,
@@ -25,6 +25,7 @@ const EditRestaurant = ({ route, navigation }) => {
   const onSave = async () => {
     setLoading(true);
     try {
+      if (!name) throw new Error(ERROR_CODES.INSERT_RESTAURANT_NAME);
       const restaurantDoc = {
         ...(editingRestaurant || {}),
         name,
@@ -37,7 +38,7 @@ const EditRestaurant = ({ route, navigation }) => {
       await RestaurantService.saveRestaurant(restaurantDoc);
       navigation.navigate(routes.HOME);
     } catch (error) {
-      errorHandler(error?.response?.data?.error);
+      errorHandler(error);
     }
     setLoading(false);
   };
@@ -47,7 +48,7 @@ const EditRestaurant = ({ route, navigation }) => {
       await RestaurantService.deleteRestaurant(editingRestaurant.id);
       navigation.navigate(routes.HOME);
     } catch (error) {
-      errorHandler(error?.response?.data?.error);
+      errorHandler(error);
     }
   };
 
