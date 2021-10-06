@@ -32,7 +32,7 @@ const EditRestaurant = ({ route, navigation }) => {
         name,
       };
       if (!editingRestaurant) {
-        restaurantDoc.id = generateNewId;
+        restaurantDoc.id = generateNewId();
         restaurantDoc.owner = user.id;
         restaurantDoc.averageRating = 0;
       }

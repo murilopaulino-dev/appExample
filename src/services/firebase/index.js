@@ -36,7 +36,9 @@ class Firebase {
   }
 
   async save(endPoint, data, config) {
+    console.log('data', data);
     const saveDocOptions = createSaveDoc(data, endPoint);
+    console.log('saveDocOptions', saveDocOptions);
     return this.api.post(COMMIT_DOC_END_POINT, saveDocOptions, config);
   }
 
